@@ -72,7 +72,11 @@
     justify-content: space-between;
     padding: 14px 32px 10px;
     border-bottom: 1px solid var(--border-soft);
+    gap: 12px;
+    flex-wrap: wrap;
   }
+  .header-top > .header-logo { flex: 1 1 auto; min-width: 0; }
+  .header-top > .header-badge, .header-top > .fb-status { flex: 0 0 auto; }
   .header-tabs {
     display: flex;
     gap: 0;
@@ -911,6 +915,42 @@
     text-transform: uppercase;
   }
 
+  /* ===== R08 - Firebase status indicator ===== */
+  .fb-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 10px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: 'N27', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .fb-status::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #d4d4d8;
+    animation: fb-pulse 1.6s ease-in-out infinite;
+  }
+  .fb-status[data-state="conectando"]::after { content: 'Conectando…'; color: var(--muted); }
+  .fb-status[data-state="conectando"]::before { background: #d97706; }
+  .fb-status[data-state="conectado"]::after  { content: 'Sincronizado'; color: #46B276; }
+  .fb-status[data-state="conectado"]::before { background: #46B276; animation: none; }
+  .fb-status[data-state="salvando"]::after   { content: 'Salvando…'; color: #d97706; }
+  .fb-status[data-state="salvando"]::before  { background: #d97706; }
+  .fb-status[data-state="offline"]::after    { content: 'Offline'; color: var(--danger); }
+  .fb-status[data-state="offline"]::before   { background: var(--danger); animation: none; }
+  @keyframes fb-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.5; transform: scale(0.8); }
+  }
   /* ===== R07 - checkboxes memorial ===== */
   .calc-print-opts {
     background: #fafafa;
@@ -1211,6 +1251,61 @@
     margin-bottom: 6px;
   }
 </style>
+
+<script type="module">
+  /* ============ FIREBASE FIRESTORE — sincronização em tempo real ============ */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, doc, setDoc, onSnapshot, enableIndexedDbPersistence }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBoG1ja1lsmAcNNoqqoOcM3Dfc0HCdQHok",
+    authDomain: "simuladoratrasobe01.firebaseapp.com",
+    projectId: "simuladoratrasobe01",
+    storageBucket: "simuladoratrasobe01.firebasestorage.app",
+    messagingSenderId: "1042414422052",
+    appId: "1:1042414422052:web:dfe9cbd42b68c0a0a6f0b1"
+  };
+
+  try {
+    const fbApp = initializeApp(firebaseConfig);
+    const db = getFirestore(fbApp);
+    // cache offline (opcional; se falhar por outra aba, tudo bem)
+    try { await enableIndexedDbPersistence(db); } catch(e){}
+
+    const refClientes = doc(db, "simulador", "clientes");
+    const refAnotacoes = doc(db, "simulador", "anotacoes");
+    const refDicionarios = doc(db, "simulador", "dicionarios");
+
+    // Helpers de escrita (debounce feito no chamador)
+    window.__fbSaveClientes  = async (overrides) => setDoc(refClientes,   { overrides, atualizadoEm: new Date().toISOString() });
+    window.__fbSaveAnotacoes = async (lista)     => setDoc(refAnotacoes,  { lista,     atualizadoEm: new Date().toISOString() });
+    window.__fbSaveDicts     = async (dicts)     => setDoc(refDicionarios,{ dicts,     atualizadoEm: new Date().toISOString() });
+
+    // Registra listeners quando o app principal estiver pronto
+    window.__fbListen = ({onClientes, onAnotacoes, onDicts, onError}) => {
+      const opts = { includeMetadataChanges: false };
+      onSnapshot(refClientes,   opts, s => onClientes(s.exists() ? s.data() : null), onError);
+      onSnapshot(refAnotacoes,  opts, s => onAnotacoes(s.exists() ? s.data() : null), onError);
+      onSnapshot(refDicionarios,opts, s => onDicts(s.exists() ? s.data() : null), onError);
+    };
+
+    // Marca como pronto e dispara callback se o app principal já estiver esperando
+    window.__fbReady = true;
+    if (typeof window.__onFbReady === 'function') window.__onFbReady();
+
+    // Atualiza indicador visual
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('fb-status'); if (el) el.setAttribute('data-state','conectado');
+    });
+  } catch (err) {
+    console.error('Firebase falhou ao inicializar:', err);
+    window.__fbReady = false;
+    document.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('fb-status'); if (el) el.setAttribute('data-state','offline');
+    });
+  }
+</script>
 </head>
 <body>
 
@@ -1225,6 +1320,7 @@
     </div>
   </div>
   <span class="header-badge">Atraso de Obra</span>
+    <span class="fb-status" id="fb-status" data-state="conectando" title="Status da sincronização em nuvem"></span>
   </div>
   <nav class="header-tabs">
     <button class="tab active" onclick="switchTab(0)">① Painel de Controle</button>
@@ -1696,7 +1792,10 @@ function saveClientesEstado(){
       };
     }
   });
+  // Cache local (funciona offline)
   try { localStorage.setItem(CLIENTES_ESTADO_KEY, JSON.stringify(overlay)); } catch(e){}
+  // Sincroniza pra nuvem (debounced 500ms)
+  fbScheduleSave('clientes', overlay);
 }
 
 function resetClientesEstado(){
@@ -2555,6 +2654,105 @@ function calcPrint(){
 // =====================================================
 const SEED_NOTAS = [{"id":"seed-1","unidade":"916","cliente":"Maria Claudia Peres Philipp","agendamento":"agendado","data":"08/07 ás 14h00","dataISO":"2026-07-08T14:00","situacao":"Solicita o documento formalizando que iremos efetuar o pagamento da multa de 1% na entrega, e também que o INCC esta isento a partir de agora.","humor":"Neutro","obs":"Esta tranquila, porém, quer um documento formalizando para se sentir mais segura","termo":"assinado","responsavel":"","atualizadoEm":""},{"id":"seed-2","unidade":"305","cliente":"HAUX ADMINISTRADORA DE BENS LTDA","agendamento":"agendado","data":"08/07 ás 16h00","dataISO":"2026-07-08T16:00","situacao":"Tem interesse nas simulações de devolução, para definirem o que irão escolher. Tem interesse em distratar.","humor":"Insatisfeito","obs":"\"Vocês vão indenizar pelo atraso?\"","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-3","unidade":"Loja 04","cliente":"Felipe de Morais Rodrigues","agendamento":"agendado","data":"08/07 ás 15h00","dataISO":"2026-07-08T15:00","situacao":"Advogado quem veio representando o cliente, ele já teve problema conosco em outro momento no BE Deodoro. Passei as opções que temos, ele irá passar para o cliente.","humor":"Neutro","obs":"\"Vão pagar as multas contratuais previstas mês a mês?\"","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-4","unidade":"1102","cliente":"BARBARA SCORSIM ARJONA","agendamento":"agendado","data":"06/07 ás 15h00","dataISO":"2026-07-06T15:00","situacao":"Solicita o documento formalizando que iremos efetuar o pagamento da multa de 1% na entrega, e também que o INCC esta isento a partir de agora.","humor":"Neutro","obs":"Estão tranquilos, mas querem um documento formalizando o recebimento da multa e isenção de INCC.","termo":"enviado","responsavel":"","atualizadoEm":""},{"id":"seed-5","unidade":"503","cliente":"Paulo Cloves Moreno da Silva","agendamento":"agendado","data":"09/07 ás 10h00","dataISO":"2026-07-09T10:00","situacao":"Quer agendar um horário na obra, não citou nada sobre recebimento da multa.","humor":"Neutro","obs":"Dani esta tentando agendar para o dia 18/07 a visita. Próximo sábado","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-6","unidade":"606","cliente":"Andre Luiz Soares","agendamento":"sem","data":"","dataISO":"","situacao":"Esta em contato via Whats, cliente próximo, esta insatisfeito, mas controlado.","humor":"Preocupado","obs":"Esta em contato via Whats, cliente próximo, esta insatisfeito, mas controlado.","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-7","unidade":"2102","cliente":"Gustavo Fregoneis Assaiante","agendamento":"sem","data":"","dataISO":"","situacao":"Aguardando documento para quitação do saldo.","humor":"Neutro","obs":"Dúvidas em relação ao saldo final. Irá quitar o saldo, com um desconto. Possível que o irão dele também quite o saldo.","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-8","unidade":"1502","cliente":"Leonardo Garbuggio Armelin","agendamento":"agendado","data":"03/07 ás 10h00","dataISO":"2026-07-03T10:00","situacao":"Conversamos por ligação, esta ciente e aceitou até o momento.","humor":"Neutro","obs":"Conversamos por ligação, esta ciente e aceitou até o momento.","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-9","unidade":"1104","cliente":"Taylor Lorenzoni Souza","agendamento":"sem","data":"","dataISO":"","situacao":"Não aceitou agendar um horário.","humor":"Insatisfeito","obs":"\"Nossa vai dar 1 ano de atraso\" - não quis agendar - continuar tentando","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-10","unidade":"607","cliente":"Douglas Vitor Pereira de Souza","agendamento":"em_agendamento","data":"","dataISO":"","situacao":"Aguardando disponibilidade do cliente","humor":"Insatisfeito","obs":"\"Lamentável né, a um mês atrás o Evandro falou que o prazo de entrega estava mantido\" - quer visitar a obra","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-11","unidade":"1708","cliente":"Ana Paula Queiroz Sampaio","agendamento":"sem","data":"07/07 ás 14:00","dataISO":"2026-07-07T00:00","situacao":"Efetuou a medição da unidade, esta tranquila.","humor":"Neutro","obs":"","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-12","unidade":"1514","cliente":"Rodrigo Muller","agendamento":"agendado","data":"08/07 ás 09h00","dataISO":"2026-07-08T09:00","situacao":"","humor":"","obs":"","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-13","unidade":"1006","cliente":"Rafael de Castro Ferrari","agendamento":"agendado","data":"03/07 ás 16h00","dataISO":"2026-07-03T16:00","situacao":"Soliciou simulações de como seria cada cenário. Atendido pelo Evandro - Visita na obra agendada para dia 16/07 ás 14h00","humor":"Insatisfeito","obs":"Valor pago: R$ 101.945,41Valor a pagar: R$ 230.433,681- Devolução (multa e devolução dos valores pagos)Valor pago + 2% de multa: R$  103.984,322- Multa de atraso (pago na entrega da obra - habite-se)R$1.019,45 por mês de atraso, seja abatendo no saldo devedor a pagar ou pago na entrega da obra direto ao cliente.","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-14","unidade":"1816","cliente":"Fabiana Leiko Mikuni de Freitas","agendamento":"agendado","data":"03/07 ás 14h00","dataISO":"2026-07-03T14:00","situacao":"Solicita o documento formalizando que iremos efetuar o pagamento da multa de 1% na entrega, e também que o INCC esta isento a partir de agora.","humor":"Preocupado","obs":"Cliente veio até a loja, representando ela e mais outros 6 clientes, eles tem interesse em fazer uma ação conjunta contra nós, porém em conversa, disse que se formalizarmos que iremos efetuar o pagamento da multa como esta em contrato e retirar o INCC, por eles ok!","termo":"enviado","responsavel":"","atualizadoEm":""},{"id":"seed-15","unidade":"1615","cliente":"Rogerio Carlos Victor","agendamento":"agendado","data":"04/07 ás 09h00","dataISO":"2026-07-04T09:00","situacao":"Solicita o documento formalizando que iremos efetuar o pagamento da multa de 1% na entrega, e também que o INCC esta isento a partir de agora.","humor":"Neutro","obs":"Cliente solicita o inicio de mobilia e decoração antes de entrega, para não ser prejudicado.","termo":"assinado","responsavel":"","atualizadoEm":""},{"id":"seed-16","unidade":"2002","cliente":"ANDREANA COMERCIAL DE TINTAS LTDA","agendamento":"agendado","data":"10/07 ás 10h00","dataISO":"2026-07-10T10:00","situacao":"Veio até a loja, conversamos, cliente esta tranquilo. Quer agendar para ir na obra","humor":"Neutro","obs":"Agendar visita na loja","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-17","unidade":"1115","cliente":"Juliano Rubens de Oliveira Ribeiro","agendamento":"agendado","data":"06/07 ás 10h00","dataISO":"2026-07-06T10:00","situacao":"Solicita o documento formalizando que iremos efetuar o pagamento da multa de 1% na entrega, e também que o INCC esta isento a partir de agora.","humor":"Neutro","obs":"\"Qual a previsão de prazo?\"","termo":"enviado","responsavel":"","atualizadoEm":""},{"id":"seed-18","unidade":"1305","cliente":"Alex Sandro Brito de Farias","agendamento":"agendado","data":"08/07 ás 09h30","dataISO":"2026-07-08T09:30","situacao":"Agendou e não compareceu","humor":"","obs":"Agendou e não compareceu, não responde as novas tentativas de contato","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-19","unidade":"406","cliente":"Victor Hugo Mendes","agendamento":"agendado","data":"14/07 ás 16h00","dataISO":"2026-07-14T16:00","situacao":"Agendado","humor":"Neutro","obs":"\"No nosso caso, como já está quitado, haverá algum tipo de indenização ou benefício pelo atraso?\"","termo":"nao_enviado","responsavel":"","atualizadoEm":""},{"id":"seed-20","unidade":"1308","cliente":"Antonio Augusto Claudio Pereira","agendamento":"agendado","data":"10/jul","dataISO":"","situacao":"Converou via Whats, não quis ligação nem vir presencial, esta com o termo para sua validação.","humor":"Neutro","obs":"","termo":"enviado","responsavel":"","atualizadoEm":""}];
 const NOTAS_KEY = 'be_garden_notas_v1';
+
+// =====================================================
+// SINCRONIZAÇÃO FIREBASE — camada de aplicação
+// =====================================================
+const _fbDebounce = { clientes: null, anotacoes: null, dicionarios: null };
+let _applyingRemote = false;  // evita loop: quando recebemos dados do servidor,
+                              // aplicamos localmente sem re-salvar (que voltaria pro servidor).
+
+function fbSetStatus(state){
+  const el = document.getElementById('fb-status');
+  if (el) el.setAttribute('data-state', state);
+}
+
+function fbScheduleSave(kind, payload){
+  if (_applyingRemote) return;                     // não ecoa de volta
+  if (!window.__fbReady) return;                    // firebase ainda não pronto (usa só localStorage)
+  clearTimeout(_fbDebounce[kind]);
+  fbSetStatus('salvando');
+  _fbDebounce[kind] = setTimeout(async () => {
+    try {
+      if      (kind === 'clientes')    await window.__fbSaveClientes(payload);
+      else if (kind === 'anotacoes')   await window.__fbSaveAnotacoes(payload);
+      else if (kind === 'dicionarios') await window.__fbSaveDicts(payload);
+      fbSetStatus('conectado');
+    } catch (err) {
+      console.error('Erro ao salvar', kind, err);
+      fbSetStatus('offline');
+    }
+  }, 500);
+}
+
+// Aplica dados vindos do Firebase em cima do estado local.
+// Usa flag _applyingRemote pra não disparar novas gravações.
+function fbApplyClientes(data){
+  if (!data || !data.overrides) return;
+  _applyingRemote = true;
+  try {
+    const ov = data.overrides;
+    clientes.forEach(c => {
+      const salvo = ov[c.unidade];
+      if (salvo) {
+        if (salvo.statusSimulacao !== undefined) c.statusSimulacao = salvo.statusSimulacao;
+        if (salvo.impactoManual   !== undefined) c.impactoManual   = salvo.impactoManual;
+        if (salvo.ultimaAtualizacao !== undefined) c.ultimaAtualizacao = salvo.ultimaAtualizacao;
+      } else {
+        // Unidade que ninguém editou remotamente — reseta pro default
+        c.statusSimulacao = 'indefinido';
+        c.impactoManual = null;
+        c.ultimaAtualizacao = null;
+      }
+    });
+    // Também espelha no localStorage
+    try { localStorage.setItem(CLIENTES_ESTADO_KEY, JSON.stringify(ov)); } catch(e){}
+    // Re-renderiza se a Aba 3 estiver visível ou a Aba 2 em cenário Real
+    if (document.getElementById('tab2')?.classList.contains('active')) {
+      renderClientTable();
+    }
+    if (cenarioAtivo === 'real' && document.getElementById('result-content')?.style.display !== 'none') {
+      atualizarResultado();
+    }
+  } finally { _applyingRemote = false; }
+}
+function fbApplyAnotacoes(data){
+  if (!data || !Array.isArray(data.lista)) return;
+  _applyingRemote = true;
+  try {
+    NOTAS = data.lista;
+    try { localStorage.setItem(NOTAS_KEY, JSON.stringify(NOTAS)); } catch(e){}
+    if (document.getElementById('tab4')?.classList.contains('active')) renderNotas();
+  } finally { _applyingRemote = false; }
+}
+function fbApplyDicts(data){
+  if (!data || !data.dicts) return;
+  _applyingRemote = true;
+  try {
+    DICTS = data.dicts;
+    localStorage.setItem('be_dictionaries', JSON.stringify(DICTS));
+    fillDictSelects();
+    if (document.getElementById('config-modal')?.classList.contains('open')) renderConfigModal();
+    if (document.getElementById('tab4')?.classList.contains('active')) renderNotas();
+  } finally { _applyingRemote = false; }
+}
+
+// Conecta listeners quando Firebase estiver pronto
+function fbInit(){
+  if (!window.__fbReady || typeof window.__fbListen !== 'function') return;
+  fbSetStatus('conectado');
+  window.__fbListen({
+    onClientes:  fbApplyClientes,
+    onAnotacoes: fbApplyAnotacoes,
+    onDicts:     fbApplyDicts,
+    onError:     (err) => { console.error('Firebase listen error', err); fbSetStatus('offline'); }
+  });
+}
+
+// O módulo Firebase carrega assíncrono. Se já estiver pronto, roda; senão, agenda.
+if (window.__fbReady) fbInit();
+else window.__onFbReady = fbInit;
+
 let NOTAS = loadNotas();
 let notasViewMode = 'lista';
 
@@ -2562,7 +2760,10 @@ function loadNotas(){
   try{ const s=localStorage.getItem(NOTAS_KEY); if(s){ const d=JSON.parse(s); if(Array.isArray(d)) return d; } }catch(e){}
   return JSON.parse(JSON.stringify(SEED_NOTAS));
 }
-function saveNotas(){ try{ localStorage.setItem(NOTAS_KEY, JSON.stringify(NOTAS)); }catch(e){} }
+function saveNotas(){
+  try{ localStorage.setItem(NOTAS_KEY, JSON.stringify(NOTAS)); }catch(e){}
+  fbScheduleSave('anotacoes', NOTAS);
+}
 
 // =====================================================
 // DICIONÁRIOS CONFIGURÁVEIS
@@ -2640,7 +2841,10 @@ function loadDicts(){
     DICTS = JSON.parse(JSON.stringify(DICTS_DEFAULT));
   }
 }
-function saveDicts(){ localStorage.setItem('be_dictionaries', JSON.stringify(DICTS)); }
+function saveDicts(){
+  localStorage.setItem('be_dictionaries', JSON.stringify(DICTS));
+  fbScheduleSave('dicionarios', DICTS);
+}
 function resetDicts(){
   if (!confirm('Restaurar todas as opções aos padrões? As opções personalizadas serão removidas.')) return;
   DICTS = JSON.parse(JSON.stringify(DICTS_DEFAULT));
