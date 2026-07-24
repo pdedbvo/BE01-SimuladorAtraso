@@ -911,6 +911,69 @@
     text-transform: uppercase;
   }
 
+  /* ===== R07 - checkboxes memorial ===== */
+  .calc-print-opts {
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-top: 16px;
+  }
+  .calc-print-opts-title {
+    font-family: 'N27', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #000;
+    margin-bottom: 8px;
+  }
+  .calc-print-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    cursor: pointer;
+    font-family: 'N27', sans-serif;
+    font-size: 12px;
+    color: #111;
+  }
+  .calc-print-check input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: #46B276;
+    cursor: pointer;
+  }
+  .btn-calc:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--muted) !important;
+    border-color: var(--muted) !important;
+  }
+  /* ===== R07 - inputs duplos % / unidades ===== */
+  .dist-inputs {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .pct-edit.unidades-edit {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .pct-edit.unidades-edit .num-input {
+    width: 50px;
+  }
+  .pct-edit.unidades-edit span {
+    font-size: 10px;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 640px) {
+    .dist-inputs { flex-direction: column; gap: 4px; align-items: flex-end; }
+  }
   /* ===== R05 - contornos fortes ===== */
   .card {
     border: 1px solid var(--border) !important;
@@ -1186,7 +1249,10 @@
         <div class="input-group">
           <div class="input-label">
             <span>🔴 Distrato (devolução 100% + multa 2%)</span>
-            <div class="pct-edit"><input type="number" class="num-input" id="in-sair" min="0" max="100" value="20" oninput="setPctFromInput('sair',0,100)"><span>%</span></div>
+            <div class="dist-inputs">
+              <div class="pct-edit"><input type="number" class="num-input" id="in-sair" min="0" max="100" value="20" oninput="setPctFromInput('sair',0,100)"><span>%</span></div>
+              <div class="pct-edit unidades-edit"><input type="number" class="num-input" id="un-sair" min="0" value="0" oninput="setUnidadesFromInput('sair')"><span>und</span></div>
+            </div>
           </div>
           <input type="range" id="pct-sair" min="0" max="100" value="20" step="1" class="slider-danger" oninput="syncSlider('sair')">
         </div>
@@ -1194,13 +1260,19 @@
         <div class="input-group">
           <div class="input-label">
             <span>🟡 Multa por Atraso (1%/mês)</span>
-            <div class="pct-edit"><input type="number" class="num-input" id="in-multa" min="0" max="100" value="30" oninput="setPctFromInput('multa',0,100)"><span>%</span></div>
+            <div class="dist-inputs">
+              <div class="pct-edit"><input type="number" class="num-input" id="in-multa" min="0" max="100" value="30" oninput="setPctFromInput('multa',0,100)"><span>%</span></div>
+              <div class="pct-edit unidades-edit"><input type="number" class="num-input" id="un-multa" min="0" value="0" oninput="setUnidadesFromInput('multa')"><span>und</span></div>
+            </div>
           </div>
           <input type="range" id="pct-multa" min="0" max="100" value="30" step="1" class="slider-warning" oninput="syncSlider('multa')">
         </div>
 
         <div style="font-size:11px; color:var(--muted); padding: 8px 12px; background: var(--surface2); border-radius:8px; margin-bottom:20px;">
-          ⚪ Restante (<span id="pct-neutro-display">50%</span>) = neutros — sem ação
+          ⚪ Restante (<span id="pct-neutro-display">50%</span> = <span id="un-neutro-display">0 und</span>) = neutros — sem ação
+          <div style="margin-top:4px;font-size:10px;opacity:0.85">
+            Base: <span id="un-base-display">0</span> unidades indefinidas no filtro <span id="un-base-filtro">todos</span>.
+          </div>
         </div>
 
         <div class="input-group">
@@ -1282,8 +1354,10 @@
   </div>
 
   <div id="result-empty" class="empty-state">
-    <div class="icon">📊</div>
-    <div>Nenhum cálculo realizado ainda.<br>Configure os parâmetros na Aba 1 e pressione <strong>Calcular</strong>.</div>
+    <div class="icon">🎲</div>
+    <div><strong>Simulação ainda não gerada.</strong><br>
+    O cenário Real está sempre disponível (basta clicar em <strong>✅ Real</strong> acima).<br>
+    Para gerar a Simulação com premissas hipotéticas, volte ao <strong>Painel de Controle</strong> e clique em <strong>⚡ Calcular Cenário</strong>.</div>
   </div>
 
   <div id="result-content" style="display:none">
@@ -1376,6 +1450,13 @@
 <div class="content" id="tab2">
   <div class="section-title">Detalhamento por Cliente</div>
   <div class="section-sub">Marque a situação de cada cliente e, se necessário, edite o Impacto Estimado com o valor real negociado. Isso é a fonte da verdade: vale no cenário Real e sobrescreve o cálculo automático na Simulação.</div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:12px;flex-wrap:wrap">
+    <div style="font-family:'N27',sans-serif;font-size:11px;color:var(--muted);letter-spacing:0.10em;text-transform:uppercase;font-weight:700">
+      💾 As edições são salvas automaticamente no seu navegador
+    </div>
+    <button class="btn-secondary" onclick="resetClientesEstado()" style="font-size:11px" title="Apaga todas as edições feitas na Aba 3">↺ Resetar edições</button>
+  </div>
 
   <div class="aba3-premissas">
     <strong>PREMISSAS DE CÁLCULO:</strong>
@@ -1508,7 +1589,18 @@
         <div class="card-title">Detalhe — Distrato</div>
         <div id="calc-distrato-detail" class="calc-detail"></div>
       </div>
-      <button class="btn-calc" style="margin-top:16px" onclick="calcPrint()">🖨 Imprimir / PDF desta simulação</button>
+      <div class="calc-print-opts">
+        <div class="calc-print-opts-title">Memoriais a incluir no PDF:</div>
+        <label class="calc-print-check">
+          <input type="checkbox" id="calc-inc-multa" checked onchange="atualizarBtnPrint()">
+          <span>🟡 Memorial da Multa por Atraso</span>
+        </label>
+        <label class="calc-print-check">
+          <input type="checkbox" id="calc-inc-distrato" checked onchange="atualizarBtnPrint()">
+          <span>🔴 Memorial do Distrato</span>
+        </label>
+      </div>
+      <button class="btn-calc" id="calc-print-btn" style="margin-top:12px" onclick="calcPrint()">🖨 Imprimir / PDF desta simulação</button>
     </div>
   </div>
 </div>
@@ -1576,15 +1668,70 @@ const BASE_CLIENTES = [{"bloco":"COMERCIAL","unidade":"LOJA 01","cliente":"HARPI
 // =====================================================
 // STATE
 // =====================================================
-let clientes = JSON.parse(JSON.stringify(BASE_CLIENTES)).map(c => ({
-  ...c,
-  impactoManual: (c.impactoManual !== undefined ? c.impactoManual : null),
-  ultimaAtualizacao: (c.ultimaAtualizacao !== undefined ? c.ultimaAtualizacao : null)
-}));
+// =====================================================
+// PERSISTÊNCIA DO ESTADO DA ABA 3 (statusSimulacao, impactoManual)
+// Chave: be_clientes_estado_v1. Indexada pela unidade.
+// =====================================================
+const CLIENTES_ESTADO_KEY = 'be_clientes_estado_v1';
+
+function loadClientesEstado(){
+  try {
+    const raw = localStorage.getItem(CLIENTES_ESTADO_KEY);
+    if (!raw) return {};
+    const d = JSON.parse(raw);
+    return (d && typeof d === 'object') ? d : {};
+  } catch (e) { return {}; }
+}
+
+function saveClientesEstado(){
+  const overlay = {};
+  clientes.forEach(c => {
+    const editado = (c.statusSimulacao !== undefined && c.statusSimulacao !== 'indefinido')
+      || (c.impactoManual !== null && c.impactoManual !== undefined && !isNaN(c.impactoManual));
+    if (editado) {
+      overlay[c.unidade] = {
+        statusSimulacao: c.statusSimulacao,
+        impactoManual:   c.impactoManual ?? null,
+        ultimaAtualizacao: c.ultimaAtualizacao ?? null,
+      };
+    }
+  });
+  try { localStorage.setItem(CLIENTES_ESTADO_KEY, JSON.stringify(overlay)); } catch(e){}
+}
+
+function resetClientesEstado(){
+  if (!confirm('Apagar TODAS as edições feitas na Aba 3 (status e impactos manuais)? Isso não pode ser desfeito.')) return;
+  try { localStorage.removeItem(CLIENTES_ESTADO_KEY); } catch(e){}
+  clientes.forEach(c => {
+    c.statusSimulacao = 'indefinido';
+    c.impactoManual = null;
+    c.ultimaAtualizacao = null;
+  });
+  renderClientTable();
+  if (document.getElementById('tab1')?.classList.contains('active')) renderAba2();
+}
+
+// Aplica overlay do localStorage em cima da base
+const _clientesEstadoOverlay = loadClientesEstado();
+let clientes = JSON.parse(JSON.stringify(BASE_CLIENTES)).map(c => {
+  const base = {
+    ...c,
+    impactoManual: (c.impactoManual !== undefined ? c.impactoManual : null),
+    ultimaAtualizacao: (c.ultimaAtualizacao !== undefined ? c.ultimaAtualizacao : null)
+  };
+  const salvo = _clientesEstadoOverlay[c.unidade];
+  if (salvo) {
+    if (salvo.statusSimulacao !== undefined) base.statusSimulacao = salvo.statusSimulacao;
+    if (salvo.impactoManual   !== undefined) base.impactoManual   = salvo.impactoManual;
+    if (salvo.ultimaAtualizacao !== undefined) base.ultimaAtualizacao = salvo.ultimaAtualizacao;
+  }
+  return base;
+});
 let filtroAtivo = 'todos';
 let sortField = 'unidade';
 let sortAsc = true;
-let cenarioAtivo = 'simulacao'; // 'simulacao' | 'real'
+let cenarioAtivo = 'real'; // 'simulacao' | 'real' — Real fica visível por padrão
+let simulacaoCalculada = false;  // vira true após o usuário clicar em Calcular Cenário
 let chartPizza = null, chartSeg = null, chartSens = null;
 
 function nowStr() {
@@ -1660,7 +1807,64 @@ function calcTotalAReceber(){ return clientes.filter(c => c.controle === 'vendid
 let TOTAL_A_RECEBER = calcTotalAReceber();
 
 function setNumIfNotFocused(id, val){ const el=document.getElementById(id); if(el && document.activeElement!==el) el.value = val; }
+// Total de clientes INDEFINIDOS no filtro atualmente selecionado no Painel de Controle.
+// Base para conversão % ↔ unidades.
+function getTotalIndefinidosFiltro(){
+  const filtroSelecionado = getFiltroFromRadio();
+  const seg = filtroSelecionado === 'todos'
+    ? clientes
+    : clientes.filter(c => c.bloco === (filtroSelecionado === 'comercial' ? 'COMERCIAL' : 'RESIDENCIAL'));
+  return seg.filter(c => c.statusSimulacao === 'indefinido').length;
+}
+
+// Lê o filtro selecionado (todos/comercial/residencial) sem depender de getParams
+function getFiltroFromRadio(){
+  const radios = document.querySelectorAll('input[name="filtro"]');
+  for (const r of radios) if (r.checked) return r.value;
+  return 'todos';
+}
+
+// Atualiza os inputs de unidades a partir dos % atuais + o "Restante"
+function updateUnidadesDisplay(){
+  const total = getTotalIndefinidosFiltro();
+  const pctSair  = parseInt(document.getElementById('in-sair').value)  || 0;
+  const pctMulta = parseInt(document.getElementById('in-multa').value) || 0;
+  const unSair  = Math.round(total * pctSair  / 100);
+  const unMulta = Math.round(total * pctMulta / 100);
+  const unNeutro = Math.max(0, total - unSair - unMulta);
+  const pctNeutro = Math.max(0, 100 - pctSair - pctMulta);
+
+  const $ = id => document.getElementById(id);
+  // Só atualiza o input se o usuário não estiver digitando lá agora
+  if (document.activeElement?.id !== 'un-sair')  $('un-sair').value  = unSair;
+  if (document.activeElement?.id !== 'un-multa') $('un-multa').value = unMulta;
+  $('pct-neutro-display').textContent = pctNeutro + '%';
+  $('un-neutro-display').textContent  = unNeutro + ' und';
+  $('un-base-display').textContent    = total;
+  $('un-base-filtro').textContent     = getFiltroFromRadio();
+}
+
+// Usuário digitou o número de unidades → converte para % e propaga
+function setUnidadesFromInput(kind){
+  const total = getTotalIndefinidosFiltro();
+  if (total === 0) return;
+  const el = document.getElementById('un-' + kind);
+  let n = parseInt(el.value) || 0;
+  if (n < 0) n = 0;
+  if (n > total) { n = total; el.value = total; }
+  const pct = Math.round((n / total) * 100);
+  // Ajusta o pct correspondente sem estourar 100 combinado
+  const outro = kind === 'sair' ? 'multa' : 'sair';
+  const pctOutro = parseInt(document.getElementById('in-' + outro).value) || 0;
+  let novoPct = pct;
+  if (novoPct + pctOutro > 100) novoPct = 100 - pctOutro;
+  document.getElementById('in-'  + kind).value = novoPct;
+  document.getElementById('pct-' + kind).value = novoPct;
+  updateUnidadesDisplay();
+}
+
 function setPctFromInput(id, min, max){
+  setTimeout(updateUnidadesDisplay, 0);
   const inp=document.getElementById('in-'+id);
   let v=parseInt(inp.value);
   if(isNaN(v)) return; // permite apagar enquanto digita
@@ -1669,6 +1873,7 @@ function setPctFromInput(id, min, max){
   syncSlider(id);
 }
 function syncSlider(tipo) {
+  setTimeout(updateUnidadesDisplay, 0);
   const sair = parseInt(document.getElementById('pct-sair').value);
   const multa = parseInt(document.getElementById('pct-multa').value);
   const meses = parseInt(document.getElementById('pct-meses').value);
@@ -1773,9 +1978,7 @@ function setCenario(c) {
   document.getElementById('cenario-btn-real').classList.toggle('active', c === 'real');
   document.getElementById('cenario-explainer-sim').style.display = c === 'simulacao' ? 'block' : 'none';
   document.getElementById('cenario-explainer-real').style.display = c === 'real' ? 'block' : 'none';
-  if (document.getElementById('result-content').style.display !== 'none') {
-    atualizarResultado();
-  }
+  renderAba2();
 }
 
 function atualizarResultado() {
@@ -1835,9 +2038,11 @@ function atualizarResultado() {
 }
 
 function calcular() {
-  atualizarResultado();
+  simulacaoCalculada = true;
+  setCenario('simulacao');
   document.getElementById('result-empty').style.display = 'none';
   document.getElementById('result-content').style.display = 'block';
+  atualizarResultado();
   switchTab(1);
 }
 
@@ -2089,7 +2294,17 @@ function updateStatus(unidade, sel) {
     c.statusSimulacao = val;
     c.ultimaAtualizacao = nowStr();
   }
+  saveClientesEstado();
+  refreshAba2SeReal();
   renderClientTable();
+}
+
+// Se a Aba 2 estiver no cenário Real, atualiza os valores em tempo real
+// quando o usuário mexe em algo na Aba 3.
+function refreshAba2SeReal(){
+  if (cenarioAtivo === 'real' && document.getElementById('result-content')?.style.display !== 'none') {
+    atualizarResultado();
+  }
 }
 
 // Corretora digitou um valor real de impacto para a unidade — passa a valer
@@ -2102,6 +2317,8 @@ function updateImpactoManual(unidade, inputEl) {
   if (raw === '') {
     c.impactoManual = null;
     c.ultimaAtualizacao = nowStr();
+    saveClientesEstado();
+    refreshAba2SeReal();
     renderClientTable();
     return;
   }
@@ -2109,10 +2326,12 @@ function updateImpactoManual(unidade, inputEl) {
   if (isNaN(val)) return;
   c.impactoManual = val;
   c.ultimaAtualizacao = nowStr();
+  saveClientesEstado();
+  refreshAba2SeReal();
   renderClientTable();
 }
 
-// Volta o impacto da unidade para o cálculo automático
+// Volta o impacto da unidade para o cálculo automático (também persiste no localStorage)
 function revertImpacto(unidade) {
   const c = clientes.find(x => x.unidade === unidade);
   if (!c) return;
@@ -2131,6 +2350,7 @@ function filtrarTabela() { renderClientTable(); }
 
 function resetarSelecoes() {
   clientes.forEach(c => c.statusSimulacao = 'indefinido');
+  saveClientesEstado(); refreshAba2SeReal();
   renderClientTable();
 }
 
@@ -2178,9 +2398,29 @@ function importarBase(event) {
 function switchTab(i) {
   document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
   document.querySelectorAll('.content').forEach((c,j) => c.classList.toggle('active', i===j));
+  if (i === 1) renderAba2();  // Aba 2: Real sempre visível; Simulação só se já calculada
   if (i === 2) renderClientTable();
   if (i === 3) initCalc();
   if (i === 4) renderNotas();
+}
+
+// Render inteligente da Aba 2: se cenário=Real, sempre calcula on-the-fly.
+// Se cenário=Simulação: só mostra se simulacaoCalculada; caso contrário exibe placeholder.
+function renderAba2(){
+  if (cenarioAtivo === 'real') {
+    document.getElementById('result-empty').style.display = 'none';
+    document.getElementById('result-content').style.display = 'block';
+    atualizarResultado();
+  } else {
+    if (simulacaoCalculada) {
+      document.getElementById('result-empty').style.display = 'none';
+      document.getElementById('result-content').style.display = 'block';
+      atualizarResultado();
+    } else {
+      document.getElementById('result-empty').style.display = 'flex';
+      document.getElementById('result-content').style.display = 'none';
+    }
+  }
 }
 
 // =====================================================
@@ -2253,7 +2493,25 @@ function calcRun(){
     'Multa da incorporadora ('+pctDist+'%): <strong>'+fmt(multaInc)+'</strong><br>'+
     'Custo total do distrato: <strong>'+fmt(custoDist)+'</strong>';
 }
+function atualizarBtnPrint(){
+  const incMulta = document.getElementById('calc-inc-multa').checked;
+  const incDist  = document.getElementById('calc-inc-distrato').checked;
+  const btn = document.getElementById('calc-print-btn');
+  const nenhum = !incMulta && !incDist;
+  btn.disabled = nenhum;
+  btn.textContent = nenhum
+    ? '⚠️ Selecione ao menos um memorial'
+    : (incMulta && incDist
+        ? '🖨 Imprimir / PDF (Multa + Distrato)'
+        : incMulta ? '🖨 Imprimir / PDF (só Multa por Atraso)'
+                   : '🖨 Imprimir / PDF (só Distrato)');
+}
+
 function calcPrint(){
+  const incMulta = document.getElementById('calc-inc-multa').checked;
+  const incDist  = document.getElementById('calc-inc-distrato').checked;
+  if (!incMulta && !incDist) { alert('Selecione ao menos um memorial para gerar o PDF.'); return; }
+
   const u=document.getElementById('calc-unidade').value||'—';
   const cli=document.getElementById('calc-cliente').value||'—';
   const multaHTML=document.getElementById('calc-multa-detail').innerHTML;
@@ -2261,17 +2519,32 @@ function calcPrint(){
   const totMulta=document.getElementById('calc-r-multa').textContent;
   const totDist=document.getElementById('calc-r-distrato').textContent;
   const meses=calcNum('calc-meses');
+
+  // Título do documento reflete o que foi incluído
+  const tituloDoc = (incMulta && incDist) ? 'Simulação de Multa e Distrato'
+                                          : incMulta ? 'Memorial de Multa por Atraso'
+                                                     : 'Memorial de Distrato';
+
+  // Cabeçalho da seção de dados: quando é só distrato, meses de atraso não é relevante
+  const linhaMeses = incMulta ? ' &nbsp;|&nbsp; Meses de atraso: <strong>'+meses+'</strong>' : '';
+
+  const secMulta = incMulta
+    ? '<h2>Memorial — Multa por Atraso (permanência)</h2><div class="box">'+multaHTML+'<br><span class="tot">Total: '+totMulta+'</span></div>'
+    : '';
+  const secDist = incDist
+    ? '<h2>Memorial — Distrato (devolução)</h2><div class="box">'+distHTML+'<br><span class="tot">Custo total: '+totDist+'</span></div>'
+    : '';
+
   const w=window.open('','_blank');
-  w.document.write('<html><head><title>Simulação — '+u+'</title><meta charset="utf-8">'+
+  w.document.write('<html><head><title>'+tituloDoc+' — '+u+'</title><meta charset="utf-8">'+
     '<style>body{font-family:Arial,Helvetica,sans-serif;color:#111;max-width:720px;margin:30px auto;padding:0 20px}'+
     'h1{font-size:20px;border-bottom:2px solid #111;padding-bottom:8px}h2{font-size:14px;margin-top:26px;color:#333}'+
     '.box{border:1px solid #ccc;border-radius:8px;padding:14px 18px;margin-top:8px;line-height:1.8;font-size:14px}'+
     '.tot{font-size:16px;font-weight:bold}.sub{color:#666;font-size:12px}strong{color:#000}'+
     '.foot{margin-top:36px;font-size:11px;color:#888;border-top:1px solid #eee;padding-top:10px}</style></head><body>'+
-    '<h1>BE Garden — Simulação de Multa</h1>'+
-    '<div class="sub">Unidade: <strong>'+u+'</strong> &nbsp;|&nbsp; Cliente: <strong>'+cli+'</strong> &nbsp;|&nbsp; Meses de atraso: <strong>'+meses+'</strong></div>'+
-    '<h2>Cenário 1 — Multa por Atraso (permanência)</h2><div class="box">'+multaHTML+'<br><span class="tot">Total: '+totMulta+'</span></div>'+
-    '<h2>Cenário 2 — Distrato (devolução)</h2><div class="box">'+distHTML+'<br><span class="tot">Custo total: '+totDist+'</span></div>'+
+    '<h1>BE Garden — '+tituloDoc+'</h1>'+
+    '<div class="sub">Unidade: <strong>'+u+'</strong> &nbsp;|&nbsp; Cliente: <strong>'+cli+'</strong>'+linhaMeses+'</div>'+
+    secMulta + secDist +
     '<div class="foot">Documento gerado pelo Simulador BE Garden como material de apoio à negociação. Valores estimados, sujeitos às condições contratuais.</div>'+
     '</body></html>');
   w.document.close(); w.focus(); setTimeout(function(){ w.print(); }, 300);
@@ -2773,7 +3046,14 @@ function configAddOpt(dictKey){
 }
 
 // Popula selects na primeira renderização (após DOM pronto)
-document.addEventListener('DOMContentLoaded', () => { try { fillDictSelects(); } catch(e){} });
+document.addEventListener('DOMContentLoaded', () => {
+  try { fillDictSelects(); } catch(e){}
+  try { updateUnidadesDisplay(); } catch(e){}
+  // Filtro (Todos/Comercial/Residencial) atualiza contagem de unidades
+  document.querySelectorAll('input[name="filtro"]').forEach(r => {
+    r.addEventListener('change', () => setTimeout(updateUnidadesDisplay, 0));
+  });
+});
 </script>
 <footer class="be-footer">
   <div class="be-footer-inner">
