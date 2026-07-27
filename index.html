@@ -915,6 +915,356 @@
     text-transform: uppercase;
   }
 
+
+  /* ===== R09 - Aba 6 Negociação ===== */
+  .nego-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .nego-toolbar input[type=text] {
+    flex: 1;
+    min-width: 240px;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .nego-toolbar select {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .nego-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .nego-kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .nego-kpi-label {
+    font-family: 'N27', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .nego-kpi-val {
+    font-family: 'N27', sans-serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: #000;
+  }
+  .nego-kpi-val.pos { color: #46B276; }
+  .nego-kpi-val.warn { color: #d97706; }
+  .nego-kpi-val.danger { color: #dc2626; }
+
+  #nego-table td, #nego-table th {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+  .nego-tipo-badge-inline {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .nego-tipo-badge-inline.multa { background: #d97706; }
+  .nego-tipo-badge-inline.sair { background: #dc2626; }
+  .nego-sit-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid;
+  }
+  .nego-sit-pendente { color: var(--muted); border-color: var(--muted); }
+  .nego-sit-parcial  { color: #d97706; border-color: #d97706; background: rgba(217,119,6,0.08); }
+  .nego-sit-distribuido { color: #46B276; border-color: #46B276; background: rgba(70,178,118,0.08); }
+  .nego-sit-fechado { color: #fff; background: #46B276; border-color: #46B276; }
+  .nego-mini-bar-wrap {
+    display: inline-block;
+    width: 100px;
+    height: 8px;
+    background: var(--border-soft);
+    border-radius: 4px;
+    overflow: hidden;
+    vertical-align: middle;
+  }
+  .nego-mini-bar {
+    height: 100%;
+    background: #46B276;
+    transition: width 0.3s;
+  }
+  .nego-mini-bar.warn { background: #d97706; }
+  .nego-mini-bar.empty { background: transparent; }
+
+  /* Modal de Negociação */
+  .nego-modal-inner {
+    max-width: 900px;
+    max-height: 92vh;
+    overflow-y: auto;
+  }
+  .nego-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 16px;
+  }
+  .nego-tipo-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: 'N27', sans-serif;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--muted);
+  }
+  .nego-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .nego-close-x {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    width: 32px; height: 32px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .nego-close-x:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+  .nego-alert {
+    background: rgba(220,38,38,0.08);
+    border: 1px solid #dc2626;
+    border-left: 3px solid #dc2626;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-family: 'N27', sans-serif;
+    font-size: 12px;
+    color: #7f1d1d;
+  }
+  .nego-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .nego-sum-item {
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .nego-sum-label {
+    font-family: 'N27', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .nego-sum-val {
+    font-family: 'N27', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    color: #000;
+    margin-top: 2px;
+  }
+  .nego-progress-wrap { margin-bottom: 20px; }
+  .nego-progress {
+    height: 10px;
+    background: var(--border-soft);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .nego-progress-bar {
+    height: 100%;
+    background: #d97706;
+    transition: width 0.3s, background-color 0.3s;
+  }
+  .nego-progress-bar.ok { background: #46B276; }
+  .nego-progress-bar.over { background: #dc2626; }
+  .nego-progress-lbl {
+    font-family: 'N27', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .nego-fields { margin-bottom: 16px; }
+  .nego-parcelas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .nego-parcelas-title {
+    font-family: 'N27', sans-serif;
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #000;
+  }
+  .nego-parcelas-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .nego-distribuir-form {
+    display: flex;
+    gap: 10px;
+    align-items: end;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: rgba(70,178,118,0.05);
+    border: 1px solid #46B276;
+    border-radius: 6px;
+    flex-wrap: wrap;
+  }
+  .nego-distribuir-form label {
+    display: block;
+    font-family: 'N27', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .nego-distribuir-form input, .nego-distribuir-form select {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+  }
+  .nego-parcelas-wrap { overflow-x: auto; }
+  .nego-parcelas-tbl { min-width: 720px; }
+  .nego-parcelas-tbl input, .nego-parcelas-tbl select {
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .nego-parcelas-tbl td { padding: 4px 6px; }
+  .nego-parcelas-tbl .del-parcela {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .nego-parcelas-tbl .del-parcela:hover { color: var(--danger); border-color: var(--danger); }
+  .btn-secondary.btn-danger { color: var(--danger); border-color: var(--danger); }
+  .btn-secondary.btn-danger:hover { background: var(--danger); color: #fff; }
+
+  /* ===== R09 - Aba 7 Fluxo de Caixa ===== */
+  .fc-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .fc-toolbar select, .fc-toolbar button {
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .fc-toolbar button { cursor: pointer; }
+  .fc-kpis {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .fc-kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .fc-kpi.highlight { border-left: 3px solid #46B276; }
+  .fc-kpi-label {
+    font-family: 'N27', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .fc-kpi-val {
+    font-family: 'N27', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    color: #000;
+  }
+  .fc-kpi-val.small { font-size: 15px; }
+  .fc-kpi-sub {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+  .fc-row-mes.expandable { cursor: pointer; }
+  .fc-row-mes.expandable:hover { background: rgba(70,178,118,0.05); }
+  .fc-row-detail {
+    background: #fafafa;
+    font-size: 11px;
+  }
+  .fc-row-detail td { padding: 6px 14px !important; color: var(--muted); }
+
+  /* ===== R09 - Tab badge / Negociação / Fluxo de Caixa ===== */
+  .tab-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 6px;
+    background: #dc2626;
+    color: #fff;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0;
+    min-width: 16px;
+    text-align: center;
+  }
   /* ===== R08 - Firebase status indicator ===== */
   .fb-status {
     display: inline-flex;
@@ -1276,18 +1626,21 @@
     const refClientes = doc(db, "simulador", "clientes");
     const refAnotacoes = doc(db, "simulador", "anotacoes");
     const refDicionarios = doc(db, "simulador", "dicionarios");
+    const refNegociacoes = doc(db, "simulador", "negociacoes");
 
     // Helpers de escrita (debounce feito no chamador)
-    window.__fbSaveClientes  = async (overrides) => setDoc(refClientes,   { overrides, atualizadoEm: new Date().toISOString() });
-    window.__fbSaveAnotacoes = async (lista)     => setDoc(refAnotacoes,  { lista,     atualizadoEm: new Date().toISOString() });
-    window.__fbSaveDicts     = async (dicts)     => setDoc(refDicionarios,{ dicts,     atualizadoEm: new Date().toISOString() });
+    window.__fbSaveClientes    = async (overrides) => setDoc(refClientes,    { overrides, atualizadoEm: new Date().toISOString() });
+    window.__fbSaveAnotacoes   = async (lista)     => setDoc(refAnotacoes,   { lista,     atualizadoEm: new Date().toISOString() });
+    window.__fbSaveDicts       = async (dicts)     => setDoc(refDicionarios, { dicts,     atualizadoEm: new Date().toISOString() });
+    window.__fbSaveNegociacoes = async (fluxos)    => setDoc(refNegociacoes, { fluxos,    atualizadoEm: new Date().toISOString() });
 
     // Registra listeners quando o app principal estiver pronto
-    window.__fbListen = ({onClientes, onAnotacoes, onDicts, onError}) => {
+    window.__fbListen = ({onClientes, onAnotacoes, onDicts, onNegociacoes, onError}) => {
       const opts = { includeMetadataChanges: false };
-      onSnapshot(refClientes,   opts, s => onClientes(s.exists() ? s.data() : null), onError);
-      onSnapshot(refAnotacoes,  opts, s => onAnotacoes(s.exists() ? s.data() : null), onError);
-      onSnapshot(refDicionarios,opts, s => onDicts(s.exists() ? s.data() : null), onError);
+      onSnapshot(refClientes,    opts, s => onClientes(s.exists() ? s.data() : null),    onError);
+      onSnapshot(refAnotacoes,   opts, s => onAnotacoes(s.exists() ? s.data() : null),   onError);
+      onSnapshot(refDicionarios, opts, s => onDicts(s.exists() ? s.data() : null),       onError);
+      onSnapshot(refNegociacoes, opts, s => onNegociacoes(s.exists() ? s.data() : null), onError);
     };
 
     // Marca como pronto e dispara callback se o app principal já estiver esperando
@@ -1328,6 +1681,8 @@
     <button class="tab" onclick="switchTab(2)">③ Detalhamento por Cliente</button>
     <button class="tab" onclick="switchTab(3)">④ Calculadora de Multa</button>
     <button class="tab" onclick="switchTab(4)">⑤ Anotações &amp; Agendamentos</button>
+    <button class="tab" onclick="switchTab(5)">⑥ Negociação <span id="nego-badge" class="tab-badge" style="display:none">0</span></button>
+    <button class="tab" onclick="switchTab(6)">⑦ Fluxo de Caixa</button>
   </nav>
 </header>
 
@@ -2404,6 +2759,17 @@ function refreshAba2SeReal(){
   if (cenarioAtivo === 'real' && document.getElementById('result-content')?.style.display !== 'none') {
     atualizarResultado();
   }
+  // Também atualiza badge Aba 6 se estiver renderizado
+  try {
+    const pendentes = clientesElegiveisNegociacao().filter(c => negoSituacao(c.unidade) === 'pendente').length;
+    const badge = document.getElementById('nego-badge');
+    if (badge) {
+      if (pendentes > 0) { badge.textContent = pendentes; badge.style.display = 'inline-block'; }
+      else { badge.style.display = 'none'; }
+    }
+    if (document.getElementById('tab5')?.classList.contains('active')) renderNegociacaoList();
+    if (document.getElementById('tab6')?.classList.contains('active')) renderFluxoCaixa();
+  } catch(e){}
 }
 
 // Corretora digitou um valor real de impacto para a unidade — passa a valer
@@ -2497,10 +2863,12 @@ function importarBase(event) {
 function switchTab(i) {
   document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', i===j));
   document.querySelectorAll('.content').forEach((c,j) => c.classList.toggle('active', i===j));
-  if (i === 1) renderAba2();  // Aba 2: Real sempre visível; Simulação só se já calculada
+  if (i === 1) renderAba2();
   if (i === 2) renderClientTable();
   if (i === 3) initCalc();
   if (i === 4) renderNotas();
+  if (i === 5) renderNegociacaoList();
+  if (i === 6) renderFluxoCaixa();
 }
 
 // Render inteligente da Aba 2: se cenário=Real, sempre calcula on-the-fly.
@@ -2742,10 +3110,11 @@ function fbInit(){
   if (!window.__fbReady || typeof window.__fbListen !== 'function') return;
   fbSetStatus('conectado');
   window.__fbListen({
-    onClientes:  fbApplyClientes,
-    onAnotacoes: fbApplyAnotacoes,
-    onDicts:     fbApplyDicts,
-    onError:     (err) => { console.error('Firebase listen error', err); fbSetStatus('offline'); }
+    onClientes:    fbApplyClientes,
+    onAnotacoes:   fbApplyAnotacoes,
+    onDicts:       fbApplyDicts,
+    onNegociacoes: fbApplyNegociacoes,
+    onError:       (err) => { console.error('Firebase listen error', err); fbSetStatus('offline'); }
   });
 }
 
@@ -3249,11 +3618,581 @@ function configAddOpt(dictKey){
   renderConfigModal();
 }
 
+
+// =====================================================
+// ⑥ NEGOCIAÇÃO + ⑦ FLUXO DE CAIXA
+// Estado compartilhado: NEGOCIACOES[unidade] = { tipo, valorTotal, parcelas[], obs, responsavel, dataFechamento, atualizadoEm }
+// Persistência: localStorage (cache) + Firebase (fonte da verdade)
+// =====================================================
+const NEGO_KEY = 'be_negociacoes_v1';
+let NEGOCIACOES = loadNegociacoes();
+
+function loadNegociacoes(){
+  try {
+    const raw = localStorage.getItem(NEGO_KEY);
+    if (!raw) return {};
+    const d = JSON.parse(raw);
+    return (d && typeof d === 'object') ? d : {};
+  } catch(e){ return {}; }
+}
+function saveNegociacoes(){
+  try { localStorage.setItem(NEGO_KEY, JSON.stringify(NEGOCIACOES)); } catch(e){}
+  fbScheduleSave('negociacoes', NEGOCIACOES);
+}
+
+// Formatador BR
+function fmtBR(v){
+  return 'R$ ' + (v||0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+function fmtMes(iso){ // '2026-11' → 'nov/2026'
+  if (!iso) return '—';
+  const [a, m] = iso.split('-');
+  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  return meses[parseInt(m,10)-1] + '/' + a;
+}
+function proxMesISO(offset=0){
+  const d = new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + offset);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function mesHojeISO(){ return proxMesISO(0); }
+
+// Calcula o valor total do impacto de um cliente usando a mesma fórmula da Aba 3.
+// Se o usuário editou manualmente, respeita esse valor.
+function valorImpactoCliente(c){
+  const status = c.statusSimulacao;
+  if (!status || status === 'indefinido' || status === 'neutro') return 0;
+  if (c.impactoManual !== null && c.impactoManual !== undefined && !isNaN(c.impactoManual)) {
+    return Number(c.impactoManual);
+  }
+  const r = calcImpactoAba3(c, status);
+  return r ? r.valor : 0;
+}
+
+// Lista de clientes elegíveis: status = sair ou multa
+function clientesElegiveisNegociacao(){
+  return clientes.filter(c => c.statusSimulacao === 'sair' || c.statusSimulacao === 'multa');
+}
+
+// Situação da negociação de um cliente
+function negoSituacao(unidade){
+  const n = NEGOCIACOES[unidade];
+  if (!n || !n.parcelas || n.parcelas.length === 0) return 'pendente';
+  const total = n.valorTotal || 0;
+  const dist  = (n.parcelas || []).reduce((s,p) => s + (Number(p.valor)||0), 0);
+  if (Math.abs(dist - total) < 1) {
+    return (n.dataFechamento && n.responsavel) ? 'fechado' : 'distribuido';
+  }
+  return 'parcial';
+}
+const NEGO_SIT_LABELS = {
+  pendente:    { txt: 'Pendente',      cls: 'nego-sit-pendente' },
+  parcial:     { txt: 'Em andamento',  cls: 'nego-sit-parcial' },
+  distribuido: { txt: '100% Distribuído', cls: 'nego-sit-distribuido' },
+  fechado:     { txt: 'Fechado',       cls: 'nego-sit-fechado' },
+};
+
+// ---------- RENDER LISTA (Aba 6) ----------
+function renderNegociacaoList(){
+  const search = (document.getElementById('nego-search')?.value || '').toLowerCase();
+  const filtroTipo = document.getElementById('nego-filter-tipo')?.value || '';
+  const filtroSit  = document.getElementById('nego-filter-status')?.value || '';
+
+  const elegiveis = clientesElegiveisNegociacao();
+  const filtrados = elegiveis.filter(c => {
+    if (filtroTipo && c.statusSimulacao !== filtroTipo) return false;
+    const sit = negoSituacao(c.unidade);
+    if (filtroSit && sit !== filtroSit) return false;
+    if (search) {
+      const blob = ((c.unidade||'')+' '+(c.cliente||'')).toLowerCase();
+      if (!blob.includes(search)) return false;
+    }
+    return true;
+  });
+
+  // KPIs
+  const kpisEl = document.getElementById('nego-kpis');
+  if (kpisEl) {
+    const totElig = elegiveis.length;
+    const totPend = elegiveis.filter(c => negoSituacao(c.unidade) === 'pendente').length;
+    const totParc = elegiveis.filter(c => negoSituacao(c.unidade) === 'parcial').length;
+    const totFec  = elegiveis.filter(c => ['distribuido','fechado'].includes(negoSituacao(c.unidade))).length;
+    const somaTotal = elegiveis.reduce((s,c) => s + valorImpactoCliente(c), 0);
+    const somaDist = elegiveis.reduce((s,c) => {
+      const n = NEGOCIACOES[c.unidade]; if (!n) return s;
+      return s + (n.parcelas||[]).reduce((ss,p) => ss + (Number(p.valor)||0), 0);
+    }, 0);
+    kpisEl.innerHTML = `
+      <div class="nego-kpi"><div class="nego-kpi-label">Clientes elegíveis</div><div class="nego-kpi-val">${totElig}</div></div>
+      <div class="nego-kpi"><div class="nego-kpi-label">Pendentes</div><div class="nego-kpi-val danger">${totPend}</div></div>
+      <div class="nego-kpi"><div class="nego-kpi-label">Em andamento</div><div class="nego-kpi-val warn">${totParc}</div></div>
+      <div class="nego-kpi"><div class="nego-kpi-label">Distribuídos / Fechados</div><div class="nego-kpi-val pos">${totFec}</div></div>
+      <div class="nego-kpi"><div class="nego-kpi-label">Valor total a negociar</div><div class="nego-kpi-val">${fmtBR(somaTotal)}</div></div>
+      <div class="nego-kpi"><div class="nego-kpi-label">Total já distribuído</div><div class="nego-kpi-val pos">${fmtBR(somaDist)}</div></div>
+    `;
+  }
+
+  const tbody = document.getElementById('nego-tbody');
+  const empty = document.getElementById('nego-empty');
+  if (filtrados.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'flex';
+  } else {
+    empty.style.display = 'none';
+    tbody.innerHTML = filtrados.map(c => {
+      const total = valorImpactoCliente(c);
+      const n = NEGOCIACOES[c.unidade];
+      const dist = n ? (n.parcelas||[]).reduce((s,p) => s + (Number(p.valor)||0), 0) : 0;
+      const pct = total > 0 ? Math.min(100, (dist/total)*100) : 0;
+      const sit = negoSituacao(c.unidade);
+      const sitInfo = NEGO_SIT_LABELS[sit];
+      const tipoBadge = c.statusSimulacao === 'multa' ? 'multa' : 'sair';
+      const tipoTxt = c.statusSimulacao === 'multa' ? 'Multa' : 'Distrato';
+      const barCls = Math.abs(dist-total) < 1 ? '' : (dist>0 ? 'warn' : 'empty');
+      const upd = n?.atualizadoEm ? new Date(n.atualizadoEm).toLocaleString('pt-BR') : '—';
+      return `<tr>
+        <td><strong>${esc(String(c.unidade))}</strong></td>
+        <td>${esc(c.cliente||'—')}</td>
+        <td><span class="nego-tipo-badge-inline ${tipoBadge}">${tipoTxt}</span></td>
+        <td style="text-align:right"><strong>${fmtBR(total)}</strong></td>
+        <td style="text-align:right">${fmtBR(dist)}</td>
+        <td><span class="nego-mini-bar-wrap"><span class="nego-mini-bar ${barCls}" style="width:${pct}%"></span></span> <small>${pct.toFixed(0)}%</small></td>
+        <td><span class="nego-sit-badge ${sitInfo.cls}">${sitInfo.txt}</span></td>
+        <td style="font-size:11px;color:var(--muted)">${upd}</td>
+        <td><button class="btn-secondary" onclick="negoModalOpen('${esc(String(c.unidade))}')">Abrir</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Atualiza badge no header (tab)
+  const pendentes = elegiveis.filter(c => negoSituacao(c.unidade) === 'pendente').length;
+  const badge = document.getElementById('nego-badge');
+  if (badge) {
+    if (pendentes > 0) { badge.textContent = pendentes; badge.style.display = 'inline-block'; }
+    else { badge.style.display = 'none'; }
+  }
+}
+
+// ---------- MODAL DE NEGOCIAÇÃO ----------
+let negoAtual = null; // { unidade, cliente, tipo, valorTotal, parcelas, ... }
+
+function negoModalOpen(unidade){
+  const c = clientes.find(x => String(x.unidade) === String(unidade));
+  if (!c) return;
+  const tipo = c.statusSimulacao; // 'sair' ou 'multa'
+  const total = valorImpactoCliente(c);
+  const salvo = NEGOCIACOES[unidade];
+  negoAtual = {
+    unidade,
+    cliente: c.cliente || '—',
+    tipo,
+    valorTotal: total,
+    parcelas: salvo ? JSON.parse(JSON.stringify(salvo.parcelas||[])) : [],
+    observacoes: salvo?.observacoes || '',
+    responsavel: salvo?.responsavel || '',
+    dataFechamento: salvo?.dataFechamento || '',
+    valorTotalSalvo: salvo?.valorTotal ?? null,
+  };
+  renderNegoModal();
+  document.getElementById('nego-modal').classList.add('open');
+}
+
+function negoModalClose(){
+  document.getElementById('nego-modal').classList.remove('open');
+  negoAtual = null;
+  document.getElementById('nego-distribuir-form').style.display = 'none';
+}
+
+function renderNegoModal(){
+  if (!negoAtual) return;
+  const n = negoAtual;
+  const tipoLbl = n.tipo === 'multa' ? 'Multa por Atraso' : 'Distrato';
+  const tipoCls = n.tipo === 'multa' ? 'multa' : 'sair';
+  document.getElementById('nego-modal-tipo').textContent = tipoLbl;
+  document.getElementById('nego-modal-tipo').className = 'nego-tipo-badge nego-tipo-badge-inline ' + tipoCls;
+  document.getElementById('nego-modal-title').textContent = 'Fluxo de pagamento — Unidade ' + n.unidade;
+  document.getElementById('nego-modal-sub').textContent = n.cliente;
+
+  // Alerta se o valor mudou desde a última vez que salvou
+  const alertEl = document.getElementById('nego-alert-valor');
+  if (n.valorTotalSalvo !== null && Math.abs(n.valorTotalSalvo - n.valorTotal) >= 1) {
+    alertEl.style.display = 'block';
+    alertEl.innerHTML = `⚠️ <strong>O valor total mudou desde a última vez que esta negociação foi salva.</strong><br>
+      Salvo anteriormente: <b>${fmtBR(n.valorTotalSalvo)}</b> · Valor atual (Aba 3): <b>${fmtBR(n.valorTotal)}</b>.<br>
+      Redistribua as parcelas para bater com o novo total antes de salvar.`;
+  } else {
+    alertEl.style.display = 'none';
+  }
+
+  document.getElementById('nego-sum-total').textContent = fmtBR(n.valorTotal);
+  document.getElementById('nego-responsavel').value = n.responsavel || '';
+  document.getElementById('nego-data-fechamento').value = n.dataFechamento || '';
+  document.getElementById('nego-obs').value = n.observacoes || '';
+  document.getElementById('dist-inicial').value = proxMesISO(1);
+
+  renderNegoParcelas();
+}
+
+function renderNegoParcelas(){
+  const tbody = document.getElementById('nego-parcelas-tbody');
+  if (!negoAtual) return;
+  const formas = [
+    {v:'pix', t:'PIX'},
+    {v:'boleto', t:'Boleto'},
+    {v:'desconto_saldo', t:'Desc. saldo'},
+    {v:'abatimento_entrega', t:'Abat. entrega'},
+    {v:'outro', t:'Outro'},
+  ];
+  const situacoes = [
+    {v:'prevista', t:'Prevista'},
+    {v:'paga', t:'Paga'},
+    {v:'atrasada', t:'Atrasada'},
+  ];
+  tbody.innerHTML = negoAtual.parcelas.map((p, idx) => `
+    <tr>
+      <td><strong>${idx+1}</strong></td>
+      <td><input type="month" value="${p.mes||''}" onchange="negoUpdateParcela(${idx},'mes',this.value)"></td>
+      <td><input type="number" step="0.01" min="0" value="${p.valor||0}" style="text-align:right" onchange="negoUpdateParcela(${idx},'valor',this.value)"></td>
+      <td><select onchange="negoUpdateParcela(${idx},'formaPagamento',this.value)">
+        ${formas.map(f => `<option value="${f.v}" ${p.formaPagamento===f.v?'selected':''}>${f.t}</option>`).join('')}
+      </select></td>
+      <td><select onchange="negoUpdateParcela(${idx},'situacao',this.value)">
+        ${situacoes.map(s => `<option value="${s.v}" ${(p.situacao||'prevista')===s.v?'selected':''}>${s.t}</option>`).join('')}
+      </select></td>
+      <td><input type="text" value="${esc(p.obs||'')}" onchange="negoUpdateParcela(${idx},'obs',this.value)" placeholder="—"></td>
+      <td><button class="del-parcela" onclick="negoDelParcela(${idx})" title="Remover parcela">🗑</button></td>
+    </tr>
+  `).join('');
+  atualizarNegoSumario();
+}
+
+function atualizarNegoSumario(){
+  if (!negoAtual) return;
+  const dist = negoAtual.parcelas.reduce((s,p) => s + (Number(p.valor)||0), 0);
+  const total = negoAtual.valorTotal;
+  const rest = total - dist;
+  const pct = total > 0 ? (dist / total) * 100 : 0;
+  document.getElementById('nego-sum-dist').textContent = fmtBR(dist);
+  document.getElementById('nego-sum-rest').textContent = fmtBR(rest);
+  const bar = document.getElementById('nego-progress-bar');
+  bar.style.width = Math.min(100, pct) + '%';
+  bar.className = 'nego-progress-bar' + (Math.abs(rest) < 1 ? ' ok' : (rest < 0 ? ' over' : ''));
+  document.getElementById('nego-progress-pct').textContent = pct.toFixed(1).replace('.',',') + '%';
+
+  // Salvar habilita só quando bate 100% (tolerância R$ 1)
+  document.getElementById('nego-save-btn').disabled = Math.abs(rest) >= 1;
+}
+
+function negoAddParcela(){
+  if (!negoAtual) return;
+  const rest = negoAtual.valorTotal - negoAtual.parcelas.reduce((s,p) => s + (Number(p.valor)||0), 0);
+  const ultimoMes = negoAtual.parcelas.length > 0
+    ? negoAtual.parcelas[negoAtual.parcelas.length - 1].mes
+    : proxMesISO(1);
+  const proximoMes = ultimoMes ? addMeses(ultimoMes, 1) : proxMesISO(1);
+  negoAtual.parcelas.push({
+    id: 'p_' + Date.now() + '_' + Math.floor(Math.random()*1000),
+    mes: proximoMes,
+    valor: Math.max(0, rest),
+    formaPagamento: 'pix',
+    situacao: 'prevista',
+    obs: '',
+  });
+  renderNegoParcelas();
+}
+function negoUpdateParcela(idx, field, val){
+  if (!negoAtual) return;
+  if (field === 'valor') val = parseFloat(val) || 0;
+  negoAtual.parcelas[idx][field] = val;
+  atualizarNegoSumario();
+}
+function negoDelParcela(idx){
+  if (!negoAtual) return;
+  if (!confirm('Remover a parcela ' + (idx+1) + '?')) return;
+  negoAtual.parcelas.splice(idx, 1);
+  renderNegoParcelas();
+}
+function negoLimpar(){
+  if (!negoAtual) return;
+  if (!confirm('Apagar todas as parcelas desta negociação?')) return;
+  negoAtual.parcelas = [];
+  renderNegoParcelas();
+}
+
+function negoAbrirDistribuir(){
+  const el = document.getElementById('nego-distribuir-form');
+  el.style.display = el.style.display === 'none' ? 'flex' : 'none';
+}
+function negoAplicarDistribuicao(){
+  if (!negoAtual) return;
+  const n = parseInt(document.getElementById('dist-n').value) || 1;
+  const inicial = document.getElementById('dist-inicial').value || proxMesISO(1);
+  const forma = document.getElementById('dist-forma').value || 'pix';
+  if (n < 1 || n > 120) { alert('Número de parcelas deve estar entre 1 e 120.'); return; }
+  if (negoAtual.parcelas.length > 0 && !confirm('Isso substitui todas as parcelas atuais. Continuar?')) return;
+
+  const valorParcela = Math.floor((negoAtual.valorTotal / n) * 100) / 100;
+  const ajusteUltima = negoAtual.valorTotal - (valorParcela * n);
+  const parcelas = [];
+  for (let i = 0; i < n; i++) {
+    parcelas.push({
+      id: 'p_' + Date.now() + '_' + i,
+      mes: addMeses(inicial, i),
+      valor: i === n - 1 ? Number((valorParcela + ajusteUltima).toFixed(2)) : valorParcela,
+      formaPagamento: forma,
+      situacao: 'prevista',
+      obs: '',
+    });
+  }
+  negoAtual.parcelas = parcelas;
+  document.getElementById('nego-distribuir-form').style.display = 'none';
+  renderNegoParcelas();
+}
+
+function addMeses(iso, delta){
+  const [a, m] = iso.split('-').map(Number);
+  const d = new Date(a, m - 1 + delta, 1);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+
+function negoSalvar(){
+  if (!negoAtual) return;
+  const dist = negoAtual.parcelas.reduce((s,p) => s + (Number(p.valor)||0), 0);
+  if (Math.abs(dist - negoAtual.valorTotal) >= 1) {
+    alert('A soma das parcelas deve bater com o valor total (com tolerância de R$ 1).');
+    return;
+  }
+  NEGOCIACOES[negoAtual.unidade] = {
+    tipo: negoAtual.tipo,
+    valorTotal: negoAtual.valorTotal,
+    parcelas: negoAtual.parcelas,
+    observacoes: document.getElementById('nego-obs').value.trim(),
+    responsavel: document.getElementById('nego-responsavel').value.trim(),
+    dataFechamento: document.getElementById('nego-data-fechamento').value || '',
+    atualizadoEm: new Date().toISOString(),
+  };
+  saveNegociacoes();
+  negoModalClose();
+  renderNegociacaoList();
+}
+
+// ---------- ⑦ FLUXO DE CAIXA ----------
+let fcChart = null;
+
+function renderFluxoCaixa(){
+  const filtroPer = document.getElementById('fc-periodo')?.value || 'all';
+  const filtroTipo = document.getElementById('fc-tipo')?.value || '';
+  const filtroSit  = document.getElementById('fc-situacao')?.value || '';
+
+  // Achata todas as parcelas de todas as negociações
+  const todasParc = [];
+  Object.entries(NEGOCIACOES).forEach(([unidade, n]) => {
+    (n.parcelas || []).forEach(p => {
+      if (filtroTipo && n.tipo !== filtroTipo) return;
+      if (filtroSit  && (p.situacao||'prevista') !== filtroSit) return;
+      todasParc.push({
+        unidade,
+        cliente: (clientes.find(c => String(c.unidade) === String(unidade))?.cliente) || '—',
+        tipo: n.tipo,
+        mes: p.mes,
+        valor: Number(p.valor) || 0,
+        situacao: p.situacao || 'prevista',
+        formaPagamento: p.formaPagamento || 'pix',
+        obs: p.obs || '',
+      });
+    });
+  });
+
+  // Filtro por período
+  const hoje = mesHojeISO();
+  const filtroFn = (isoMes) => {
+    if (!isoMes) return false;
+    if (filtroPer === 'all') return true;
+    if (filtroPer === '12')    return isoMes >= hoje && isoMes <= addMeses(hoje, 11);
+    if (filtroPer === '24')    return isoMes >= hoje && isoMes <= addMeses(hoje, 23);
+    if (filtroPer === '6prev') return isoMes >= addMeses(hoje, -6) && isoMes <= addMeses(hoje, 12);
+    return true;
+  };
+  const parcelasFiltradas = todasParc.filter(p => filtroFn(p.mes));
+
+  // Agrupa por mês
+  const porMes = {};
+  parcelasFiltradas.forEach(p => {
+    const k = p.mes;
+    if (!porMes[k]) porMes[k] = { mes: k, multa: 0, sair: 0, qtd: 0, parcelas: [] };
+    porMes[k][p.tipo] += p.valor;
+    porMes[k].qtd += 1;
+    porMes[k].parcelas.push(p);
+  });
+  const meses = Object.values(porMes).sort((a,b) => a.mes.localeCompare(b.mes));
+
+  // KPIs
+  const totGeral = parcelasFiltradas.reduce((s,p) => s + p.valor, 0);
+  const totPago  = parcelasFiltradas.filter(p => p.situacao === 'paga').reduce((s,p) => s + p.valor, 0);
+  const prox12ISO = addMeses(hoje, 11);
+  const prox12 = parcelasFiltradas.filter(p => p.mes >= hoje && p.mes <= prox12ISO).reduce((s,p) => s + p.valor, 0);
+  const proxMes = parcelasFiltradas.filter(p => p.mes === proxMesISO(1)).reduce((s,p) => s + p.valor, 0);
+
+  document.getElementById('fc-kpis').innerHTML = `
+    <div class="fc-kpi">
+      <div class="fc-kpi-label">Total geral (no filtro)</div>
+      <div class="fc-kpi-val">${fmtBR(totGeral)}</div>
+      <div class="fc-kpi-sub">${parcelasFiltradas.length} parcelas</div>
+    </div>
+    <div class="fc-kpi">
+      <div class="fc-kpi-label">Total já pago</div>
+      <div class="fc-kpi-val">${fmtBR(totPago)}</div>
+      <div class="fc-kpi-sub">${(totGeral > 0 ? (totPago/totGeral*100) : 0).toFixed(0)}% do total</div>
+    </div>
+    <div class="fc-kpi">
+      <div class="fc-kpi-label">Próximos 12 meses</div>
+      <div class="fc-kpi-val small">${fmtBR(prox12)}</div>
+    </div>
+    <div class="fc-kpi highlight">
+      <div class="fc-kpi-label">Próximo mês (${fmtMes(proxMesISO(1))})</div>
+      <div class="fc-kpi-val">${fmtBR(proxMes)}</div>
+    </div>
+  `;
+
+  // Gráfico
+  const canvas = document.getElementById('fc-chart');
+  if (canvas) {
+    if (fcChart) { fcChart.destroy(); fcChart = null; }
+    if (meses.length > 0) {
+      const labels = meses.map(m => fmtMes(m.mes));
+      const dsMulta = meses.map(m => m.multa);
+      const dsSair  = meses.map(m => m.sair);
+      // acumulado
+      let acc = 0;
+      const dsAcc = meses.map(m => { acc += (m.multa + m.sair); return acc; });
+
+      fcChart = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            { label: '🟡 Multa', data: dsMulta, backgroundColor: 'rgba(217,119,6,0.85)', borderRadius: 4, stack: 'a' },
+            { label: '🔴 Distrato', data: dsSair, backgroundColor: 'rgba(220,38,38,0.85)', borderRadius: 4, stack: 'a' },
+            { label: 'Acumulado', data: dsAcc, type: 'line', borderColor: '#46B276', backgroundColor: 'rgba(70,178,118,0.08)', fill: false, borderWidth: 2, tension: 0.2, yAxisID: 'y' },
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#111111', font: { family: 'N27', size: 11 } } },
+            tooltip: { callbacks: { label: (ctx) => ctx.dataset.label + ': ' + fmtBR(ctx.parsed.y) } }
+          },
+          scales: {
+            x: { stacked: true, grid: { color: '#d4d4d8' }, ticks: { color: '#71717a', font: { family: 'N27', size: 10 } } },
+            y: { stacked: true, grid: { color: '#d4d4d8' }, ticks: { color: '#71717a', font: { family: 'N27', size: 10 }, callback: v => 'R$ ' + (v/1000).toFixed(0) + 'k' } }
+          }
+        }
+      });
+    }
+  }
+
+  // Tabela mês a mês
+  const tbody = document.getElementById('fc-tbody');
+  const empty = document.getElementById('fc-empty');
+  if (meses.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'flex';
+  } else {
+    empty.style.display = 'none';
+    let accum = 0;
+    tbody.innerHTML = meses.map((m, idx) => {
+      const total = m.multa + m.sair;
+      accum += total;
+      const detailId = 'fc-det-' + idx;
+      const parcelasHtml = m.parcelas.map(p => `
+        <tr class="fc-row-detail">
+          <td colspan="6">
+            ${p.tipo === 'multa' ? '🟡' : '🔴'} Un. <strong>${esc(String(p.unidade))}</strong> · ${esc(p.cliente)} — ${fmtBR(p.valor)}
+            · ${p.situacao} · ${p.formaPagamento}${p.obs ? ' · <em>'+esc(p.obs)+'</em>' : ''}
+          </td>
+        </tr>
+      `).join('');
+      return `<tr class="fc-row-mes expandable" onclick="fcToggleDetail('${detailId}')">
+        <td><strong>${fmtMes(m.mes)}</strong></td>
+        <td style="text-align:right">${m.qtd}</td>
+        <td style="text-align:right">${fmtBR(m.multa)}</td>
+        <td style="text-align:right">${fmtBR(m.sair)}</td>
+        <td style="text-align:right"><strong>${fmtBR(total)}</strong></td>
+        <td style="text-align:right">${fmtBR(accum)}</td>
+      </tr>
+      <tr id="${detailId}" style="display:none"><td colspan="6" style="padding:0"><table style="width:100%"><tbody>${parcelasHtml}</tbody></table></td></tr>`;
+    }).join('');
+  }
+}
+
+function fcToggleDetail(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? '' : 'none';
+}
+
+function exportarFluxoCaixaXlsx(){
+  // Achata parcelas
+  const rows = [['Unidade','Cliente','Tipo','Mês','Valor (R$)','Situação','Forma pagto','Observação','Responsável','Data fechamento']];
+  Object.entries(NEGOCIACOES).forEach(([unidade, n]) => {
+    const c = clientes.find(cl => String(cl.unidade) === String(unidade));
+    (n.parcelas || []).forEach(p => {
+      rows.push([
+        unidade,
+        c?.cliente || '—',
+        n.tipo === 'multa' ? 'Multa' : 'Distrato',
+        p.mes || '',
+        Number(p.valor) || 0,
+        p.situacao || 'prevista',
+        p.formaPagamento || '',
+        p.obs || '',
+        n.responsavel || '',
+        n.dataFechamento || '',
+      ]);
+    });
+  });
+  if (rows.length === 1) { alert('Nenhuma parcela para exportar.'); return; }
+
+  // Fallback: gera CSV (o simulador não carrega SheetJS por padrão)
+  const csv = rows.map(r => r.map(v => {
+    const s = String(v).replace(/"/g, '""');
+    return /[",;\n]/.test(s) ? '"' + s + '"' : s;
+  }).join(';')).join('\r\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const hoje = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `fluxo-caixa-be-garden-${hoje}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ---------- Firebase apply ----------
+function fbApplyNegociacoes(data){
+  if (!data || !data.fluxos) return;
+  _applyingRemote = true;
+  try {
+    NEGOCIACOES = data.fluxos;
+    try { localStorage.setItem(NEGO_KEY, JSON.stringify(NEGOCIACOES)); } catch(e){}
+    if (document.getElementById('tab5')?.classList.contains('active')) renderNegociacaoList();
+    if (document.getElementById('tab6')?.classList.contains('active')) renderFluxoCaixa();
+    // Sempre atualiza o badge do tab 6
+    const pendentes = clientesElegiveisNegociacao().filter(c => negoSituacao(c.unidade) === 'pendente').length;
+    const badge = document.getElementById('nego-badge');
+    if (badge) {
+      if (pendentes > 0) { badge.textContent = pendentes; badge.style.display = 'inline-block'; }
+      else { badge.style.display = 'none'; }
+    }
+  } finally { _applyingRemote = false; }
+}
+
 // Popula selects na primeira renderização (após DOM pronto)
 document.addEventListener('DOMContentLoaded', () => {
   try { fillDictSelects(); } catch(e){}
   try { updateUnidadesDisplay(); } catch(e){}
-  // Filtro (Todos/Comercial/Residencial) atualiza contagem de unidades
+  try { renderNegociacaoList(); } catch(e){}
   document.querySelectorAll('input[name="filtro"]').forEach(r => {
     r.addEventListener('change', () => setTimeout(updateUnidadesDisplay, 0));
   });
@@ -3293,6 +4232,222 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 </style>
 
+
+<!-- ===================== ⑥ ABA NEGOCIAÇÃO ===================== -->
+<div class="content" id="tab5">
+  <div class="section-title">Negociação — Fluxo de Pagamento por Cliente</div>
+  <div class="section-sub">Distribua o valor de multa ou distrato de cada cliente em parcelas mensais. Só clientes com status <b>Multa</b> ou <b>Distrato</b> na Aba 3 aparecem aqui.</div>
+
+  <div class="nego-toolbar">
+    <input type="text" id="nego-search" placeholder="Buscar por unidade ou cliente..." oninput="renderNegociacaoList()">
+    <select id="nego-filter-tipo" onchange="renderNegociacaoList()">
+      <option value="">Todos os tipos</option>
+      <option value="multa">🟡 Multa por Atraso</option>
+      <option value="sair">🔴 Distrato</option>
+    </select>
+    <select id="nego-filter-status" onchange="renderNegociacaoList()">
+      <option value="">Todas as situações</option>
+      <option value="pendente">⚪ Pendente (nada distribuído)</option>
+      <option value="parcial">🟠 Em andamento (parcial)</option>
+      <option value="distribuido">🟢 Distribuído (100%)</option>
+      <option value="fechado">✅ Fechado (com data)</option>
+    </select>
+  </div>
+
+  <div id="nego-kpis" class="nego-kpis"></div>
+
+  <div class="card" style="padding:0;overflow:hidden">
+    <div id="nego-tbody-wrap" style="overflow-x:auto">
+      <table id="nego-table" class="dt">
+        <thead>
+          <tr>
+            <th>Unidade</th>
+            <th>Cliente</th>
+            <th>Tipo</th>
+            <th style="text-align:right">Valor Total</th>
+            <th style="text-align:right">Distribuído</th>
+            <th>Progresso</th>
+            <th>Situação</th>
+            <th>Última Atualização</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="nego-tbody"></tbody>
+      </table>
+    </div>
+    <div id="nego-empty" class="empty-state" style="display:none">
+      <div class="icon">💼</div>
+      <div>Nenhum cliente elegível para negociação.<br>Vá à Aba <strong>③ Detalhamento por Cliente</strong> e marque clientes como <strong>Distrato</strong> ou <strong>Multa</strong>.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== ⑦ ABA FLUXO DE CAIXA ===================== -->
+<div class="content" id="tab6">
+  <div class="section-title">Fluxo de Caixa — Consolidação Mensal</div>
+  <div class="section-sub">Consolidação de todas as parcelas distribuídas na Aba 6. Mostra quanto sai de caixa em cada mês, separado por tipo.</div>
+
+  <div class="fc-toolbar">
+    <select id="fc-periodo" onchange="renderFluxoCaixa()">
+      <option value="all" selected>Todo o período</option>
+      <option value="12">Próximos 12 meses</option>
+      <option value="24">Próximos 24 meses</option>
+      <option value="6prev">Últimos 6 + próximos 12</option>
+    </select>
+    <select id="fc-tipo" onchange="renderFluxoCaixa()">
+      <option value="">Todos os tipos</option>
+      <option value="multa">🟡 Só Multa</option>
+      <option value="sair">🔴 Só Distrato</option>
+    </select>
+    <select id="fc-situacao" onchange="renderFluxoCaixa()">
+      <option value="">Todas as situações</option>
+      <option value="prevista">Previstas</option>
+      <option value="paga">Pagas</option>
+      <option value="atrasada">Atrasadas</option>
+    </select>
+    <button class="btn-secondary" onclick="exportarFluxoCaixaXlsx()" title="Exportar consolidação para Excel">📥 Exportar Excel</button>
+  </div>
+
+  <div id="fc-kpis" class="fc-kpis"></div>
+
+  <div class="card" style="margin-top:20px;padding:20px">
+    <div class="card-title">Impacto Mensal no Caixa</div>
+    <div style="height: 320px; position: relative; margin-top:12px">
+      <canvas id="fc-chart"></canvas>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;padding:0;overflow:hidden">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-family:'N27',sans-serif;font-weight:900;letter-spacing:0.08em;text-transform:uppercase;color:#000">Detalhamento por Mês</div>
+    <div style="overflow-x:auto">
+      <table id="fc-table" class="dt">
+        <thead>
+          <tr>
+            <th>Mês</th>
+            <th style="text-align:right"># Parcelas</th>
+            <th style="text-align:right">Multa</th>
+            <th style="text-align:right">Distrato</th>
+            <th style="text-align:right">Total do Mês</th>
+            <th style="text-align:right">Acumulado</th>
+          </tr>
+        </thead>
+        <tbody id="fc-tbody"></tbody>
+      </table>
+    </div>
+    <div id="fc-empty" class="empty-state" style="display:none">
+      <div class="icon">📈</div>
+      <div>Nenhuma parcela distribuída ainda.<br>Vá à Aba <strong>⑥ Negociação</strong> para começar a distribuir as parcelas.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===================== MODAL DE NEGOCIAÇÃO ===================== -->
+<div class="modal-overlay" id="nego-modal">
+  <div class="modal nego-modal-inner">
+    <div class="nego-modal-header">
+      <div>
+        <div class="nego-tipo-badge" id="nego-modal-tipo">—</div>
+        <h3 id="nego-modal-title" style="margin:6px 0 0">Fluxo de pagamento</h3>
+        <div class="nego-sub" id="nego-modal-sub">—</div>
+      </div>
+      <button class="nego-close-x" onclick="negoModalClose()">✕</button>
+    </div>
+
+    <div id="nego-alert-valor" class="nego-alert" style="display:none"></div>
+
+    <div class="nego-summary">
+      <div class="nego-sum-item">
+        <div class="nego-sum-label">Valor Total (Aba 3)</div>
+        <div class="nego-sum-val" id="nego-sum-total">R$ 0,00</div>
+      </div>
+      <div class="nego-sum-item">
+        <div class="nego-sum-label">Distribuído</div>
+        <div class="nego-sum-val" id="nego-sum-dist">R$ 0,00</div>
+      </div>
+      <div class="nego-sum-item">
+        <div class="nego-sum-label">Restante</div>
+        <div class="nego-sum-val" id="nego-sum-rest">R$ 0,00</div>
+      </div>
+    </div>
+
+    <div class="nego-progress-wrap">
+      <div class="nego-progress"><div class="nego-progress-bar" id="nego-progress-bar" style="width:0%"></div></div>
+      <div class="nego-progress-lbl"><span id="nego-progress-pct">0,0%</span> distribuído</div>
+    </div>
+
+    <div class="nego-fields">
+      <div class="calc-grid2">
+        <div class="calc-field">
+          <label>Responsável pela negociação</label>
+          <input type="text" id="nego-responsavel" placeholder="Nome do gerente/corretor">
+        </div>
+        <div class="calc-field">
+          <label>Data de fechamento</label>
+          <input type="date" id="nego-data-fechamento">
+        </div>
+      </div>
+      <div class="calc-field">
+        <label>Observações da negociação</label>
+        <textarea class="calc-ta" id="nego-obs" placeholder="Contexto, condições especiais, ressalvas..." rows="3"></textarea>
+      </div>
+    </div>
+
+    <div class="nego-parcelas-header">
+      <div class="nego-parcelas-title">Parcelas</div>
+      <div class="nego-parcelas-actions">
+        <button class="btn-secondary" onclick="negoAbrirDistribuir()" title="Preenche automaticamente N parcelas iguais">🎯 Distribuir em N parcelas</button>
+        <button class="btn-secondary" onclick="negoAddParcela()">+ Adicionar parcela</button>
+      </div>
+    </div>
+
+    <div id="nego-distribuir-form" class="nego-distribuir-form" style="display:none">
+      <div>
+        <label>Nº de parcelas</label>
+        <input type="number" id="dist-n" min="1" max="120" value="12">
+      </div>
+      <div>
+        <label>Mês inicial</label>
+        <input type="month" id="dist-inicial">
+      </div>
+      <div>
+        <label>Forma de pagamento</label>
+        <select id="dist-forma">
+          <option value="pix">PIX</option>
+          <option value="boleto">Boleto</option>
+          <option value="desconto_saldo">Desconto no saldo</option>
+          <option value="abatimento_entrega">Abatimento na entrega</option>
+          <option value="outro">Outro</option>
+        </select>
+      </div>
+      <button class="btn-calc" onclick="negoAplicarDistribuicao()">Aplicar</button>
+      <button class="btn-secondary" onclick="negoAbrirDistribuir()">Cancelar</button>
+    </div>
+
+    <div class="nego-parcelas-wrap">
+      <table id="nego-parcelas" class="dt nego-parcelas-tbl">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Mês</th>
+            <th style="text-align:right">Valor (R$)</th>
+            <th>Forma</th>
+            <th>Situação</th>
+            <th>Obs.</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="nego-parcelas-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="negoModalClose()">Cancelar</button>
+      <button class="btn-secondary btn-danger" onclick="negoLimpar()" title="Apaga todas as parcelas desta negociação">🗑 Limpar tudo</button>
+      <button class="btn-calc" id="nego-save-btn" onclick="negoSalvar()" disabled>💾 Salvar negociação</button>
+    </div>
+  </div>
+</div>
 <!-- ===================== MODAL DE CONFIGURAÇÕES ===================== -->
 <div class="modal-overlay" id="config-modal">
   <div class="modal config-modal-inner">
