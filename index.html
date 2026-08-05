@@ -1251,6 +1251,129 @@
   }
   .fc-row-detail td { padding: 6px 14px !important; color: var(--muted); }
 
+  
+  
+  /* ===== R12 - Racional INCC ===== */
+  .rac-modal-inner { max-width: 1000px; max-height: 92vh; overflow-y: auto; }
+  .rac-modal-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 16px;
+  }
+  .rac-header {
+    font-family: 'N27', sans-serif;
+    font-size: 13px;
+    color: #000;
+    margin-bottom: 12px;
+  }
+  .rac-header .rac-sub {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+  .rac-resumo {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .rac-resumo-item {
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 14px;
+  }
+  .rac-r-lbl {
+    font-family: 'N27', sans-serif;
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+  .rac-r-val {
+    font-family: 'N27', sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    color: #000;
+  }
+  .rac-tbl {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'N27', sans-serif;
+    font-size: 11px;
+  }
+  .rac-tbl th {
+    background: #f4f4f5;
+    border-bottom: 2px solid var(--border-strong);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #000;
+    font-weight: 900;
+  }
+  .rac-tbl td { padding: 6px 10px; border-bottom: 1px solid var(--border-soft); }
+  .rac-tbl tr:hover td { background: #fafafa; }
+  .rac-tbl .rac-c { text-align: center; }
+  .rac-tbl .rac-r { text-align: right; }
+  .rac-tbl small { color: var(--muted); font-size: 9px; }
+  .rac-tbl .rac-fator { color: #46B276; font-weight: 700; }
+  .rac-tbl .rac-corrigido { color: #000; font-weight: 700; }
+  .rac-tbl tfoot td {
+    background: #f4f4f5;
+    border-top: 2px solid var(--border-strong);
+    padding: 10px;
+    font-size: 12px;
+  }
+  .rac-tbl tr.rac-aviso td { background: rgba(217,119,6,0.05); }
+  .rac-nota {
+    margin-top: 14px;
+    padding: 10px 14px;
+    background: rgba(70,178,118,0.06);
+    border-left: 3px solid #46B276;
+    border-radius: 4px;
+    font-family: 'N27', sans-serif;
+    font-size: 11px;
+    color: #333;
+    line-height: 1.5;
+  }
+  .rac-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 3px 7px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    margin-left: 4px;
+    transition: all 0.12s;
+  }
+  .rac-btn:hover {
+    border-color: #46B276;
+    color: #46B276;
+  }
+
+  /* ===== R11 - Modal de relatório ===== */
+  .rel-modal-inner {
+    max-width: 620px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .rel-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+
   /* ===== R10 - INCC config ===== */
   .incc-header, .incc-row {
     display: grid;
@@ -2087,6 +2210,10 @@
       <div class="calc-print-opts">
         <div class="calc-print-opts-title">Memoriais a incluir no PDF:</div>
         <label class="calc-print-check">
+          <input type="checkbox" id="calc-inc-racional" checked>
+          <span>🔍 Racional da Correção INCC (base do cálculo, parcela a parcela)</span>
+        </label>
+        <label class="calc-print-check">
           <input type="checkbox" id="calc-inc-multa" checked onchange="atualizarBtnPrint()">
           <span>🟡 Memorial da Multa por Atraso</span>
         </label>
@@ -2115,6 +2242,7 @@
     <select id="notas-filter-agend" onchange="renderNotas()"></select>
     <button class="btn-secondary" onclick="notaNova()">+ Nova anotação</button>
     <button class="btn-secondary" onclick="configModalOpen()" title="Configurar opções dos campos">⚙️ Configurações</button>
+    <button class="btn-secondary" onclick="relatorioModalOpen()" title="Gerar relatório PDF com filtros de data" style="border-color:#46B276;color:#46B276">📥 Gerar Relatório PDF</button>
     <button class="btn-secondary" onclick="exportarNotas()">⬇ Exportar</button>
     <label class="btn-secondary" style="cursor:pointer">⬆ Importar
       <input type="file" accept=".json" style="display:none" onchange="importarNotas(event)"></label>
@@ -2903,7 +3031,7 @@ function renderClientTable() {
       <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;font-size:11px">${c.cliente}</td>
       <td><span class="${c.controle==='quitada'?'badge-quitada':'badge-residencial'}" style="${c.controle==='quitada'?'':'background:rgba(255,165,2,0.1);color:var(--warning)'}">${c.controle}</span></td>
       <td style="color:var(--muted)">${c.dataVenda}</td>
-      <td style="color:var(--text);font-weight:700">${fmt(_t.recebidoCorrigidoIncc)}${_alertIncc}</td>
+      <td style="color:var(--text);font-weight:700">${fmt(_t.recebidoCorrigidoIncc)}${_alertIncc} <button class="rac-btn" onclick="event.stopPropagation();racionalModalOpen('${c.unidade}')" title="Ver detalhamento parcela a parcela da correção INCC">🔍</button></td>
       <td style="color:var(--text)">${fmt(_t.recebidoCorrigido)}</td>
       <td style="color:var(--muted)">${c.controle==='quitada'?'—':fmt(_t.aReceberCorrigido)}</td>
       <td style="color:var(--text);font-weight:500">${fmt(base)}</td>
@@ -3114,8 +3242,20 @@ function calcLoadUnidade(){
   const c=clientes.find(x=>String(x.unidade)===String(u));
   if(!c) return;
   document.getElementById('calc-cliente').value=c.cliente;
-  document.getElementById('calc-pago').value=Math.round(c.recebido*100)/100;
-  document.getElementById('calc-areceber').value=Math.round((c.aReceber||0)*100)/100;
+  // Puxa a mesma base usada em toda ferramenta: Recebido Corrigido INCC da Aba 3.
+  const t = totaisPorUnidade(c.unidade);
+  document.getElementById('calc-pago').value    = Math.round(t.recebidoCorrigidoIncc*100)/100;
+  document.getElementById('calc-areceber').value= Math.round((t.aReceberCorrigido||0)*100)/100;
+  // Aviso visual se o motor INCC não conseguiu corrigir alguma parcela (por falta de índice)
+  const badge = document.getElementById('calc-incc-badge');
+  if (badge) {
+    if (t.mesesFaltandoIncc && t.mesesFaltandoIncc.length > 0) {
+      badge.style.display = 'inline-flex';
+      badge.title = 'INCC-DI faltando para: ' + t.mesesFaltandoIncc.join(', ') + '. A correção parou no último mês disponível.';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
   calcRun();
 }
 function calcReset(){ calcLoadUnidade(); }
@@ -3192,19 +3332,31 @@ function calcPrint(){
     ? '<h2>Memorial — Distrato (devolução)</h2><div class="box">'+distHTML+'<br><span class="tot">Custo total: '+totDist+'</span></div>'
     : '';
 
+  // Racional da correção INCC (opcional, checkbox)
+  const incRacional = document.getElementById('calc-inc-racional')?.checked;
+  const secRacional = (incRacional && u !== '—')
+    ? '<h2>Base do Cálculo — Racional da Correção INCC</h2>' + gerarRacionalHTML(u, 'pdf')
+    : '';
+
   const w=window.open('','_blank');
-  w.document.write('<html><head><title>'+tituloDoc+' — '+u+'</title><meta charset="utf-8">'+
-    '<style>body{font-family:Arial,Helvetica,sans-serif;color:#111;max-width:720px;margin:30px auto;padding:0 20px}'+
-    'h1{font-size:20px;border-bottom:2px solid #111;padding-bottom:8px}h2{font-size:14px;margin-top:26px;color:#333}'+
-    '.box{border:1px solid #ccc;border-radius:8px;padding:14px 18px;margin-top:8px;line-height:1.8;font-size:14px}'+
-    '.tot{font-size:16px;font-weight:bold}.sub{color:#666;font-size:12px}strong{color:#000}'+
-    '.foot{margin-top:36px;font-size:11px;color:#888;border-top:1px solid #eee;padding-top:10px}</style></head><body>'+
+  w.document.write('<!DOCTYPE html><html><head><title>'+tituloDoc+' — '+u+'</title><meta charset="utf-8">'+
+    '<style>'+
+      pdfStyleBase()+
+      'h1{font-size:20pt;padding-bottom:6px;border-bottom:2px solid #000;margin:0 0 4px;font-weight:900;letter-spacing:-0.02em}'+
+      'h2{font-size:13pt;margin:22px 0 10px;color:#000;font-weight:900;letter-spacing:0.06em;text-transform:uppercase;border-bottom:2px solid #000;padding-bottom:4px}'+
+      '.box{border:1px solid #d4d4d8;border-radius:6px;padding:12px 16px;margin-top:6px;line-height:1.7;font-size:11pt;background:#fff}'+
+      '.tot{font-size:13pt;font-weight:900}'+
+      '.sub{color:#555;font-size:10pt;margin-bottom:16px}'+
+      'strong{color:#000}'+
+      '.foot{margin-top:32px;font-size:9pt;color:#888;border-top:1px solid #e4e4e7;padding-top:10px}'+
+      pdfStyleRacional()+
+    '</style></head><body>'+
     '<h1>BE Garden — '+tituloDoc+'</h1>'+
     '<div class="sub">Unidade: <strong>'+u+'</strong> &nbsp;|&nbsp; Cliente: <strong>'+cli+'</strong>'+linhaMeses+'</div>'+
-    secMulta + secDist +
+    secRacional + secMulta + secDist +
     '<div class="foot">Documento gerado pelo Simulador BE Garden como material de apoio à negociação. Valores estimados, sujeitos às condições contratuais.</div>'+
     '</body></html>');
-  w.document.close(); w.focus(); setTimeout(function(){ w.print(); }, 300);
+  w.document.close(); w.focus(); setTimeout(function(){ w.print(); }, 500);
 }
 
 // =====================================================
@@ -4490,6 +4642,521 @@ function fbApplyNegociacoes(data){
   } finally { _applyingRemote = false; }
 }
 
+
+// =====================================================
+// GERADOR DE RELATÓRIO PDF — Anotações & Agendamentos
+// =====================================================
+const TIMBRADO_BE_B64 = "data:image/jpeg;base64,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AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA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";
+
+function relatorioModalOpen(){
+  document.getElementById('relatorio-modal').classList.add('open');
+  atualizarPreviewRelatorio();
+}
+function relatorioModalClose(){
+  document.getElementById('relatorio-modal').classList.remove('open');
+}
+
+// Filtra anotações pelo período + demais filtros da Aba 5 já aplicados
+function anotacoesParaRelatorio(){
+  const de = document.getElementById('rel-de').value;
+  const ate = document.getElementById('rel-ate').value;
+  const baseData = document.getElementById('rel-base-data').value;
+  const filtradas = notasFiltradas();
+  return filtradas.filter(n => {
+    let data;
+    if (baseData === 'criacao') {
+      data = (n.criadoEm || n.atualizadoEm || '').slice(0,10);
+    } else {
+      data = (n.dataISO || '').slice(0,10);
+    }
+    if (!data && baseData === 'anotacao') return false;  // anotação sem data não entra em filtro de período
+    if (!data) return true;                                // criação: aceita mesmo sem
+    if (de && data < de) return false;
+    if (ate && data > ate) return false;
+    return true;
+  }).sort((a,b) => {
+    const da = (baseData === 'criacao' ? (a.criadoEm||a.atualizadoEm||'') : (a.dataISO||'')).slice(0,10);
+    const db = (baseData === 'criacao' ? (b.criadoEm||b.atualizadoEm||'') : (b.dataISO||'')).slice(0,10);
+    return db.localeCompare(da);
+  });
+}
+
+function atualizarPreviewRelatorio(){
+  const lista = anotacoesParaRelatorio();
+  const info = document.getElementById('rel-preview-count');
+  const de = document.getElementById('rel-de').value;
+  const ate = document.getElementById('rel-ate').value;
+  const periodo = (de || ate) ? `${de||'início'} → ${ate||'hoje'}` : 'todo o período disponível';
+  info.innerHTML = `<strong>${lista.length}</strong> anotação(ões) no filtro atual · Período: ${periodo}`;
+}
+
+// Vincula atualização do preview aos inputs
+document.addEventListener('DOMContentLoaded', () => {
+  ['rel-de','rel-ate','rel-base-data'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('change', atualizarPreviewRelatorio);
+  });
+});
+
+function relatorioGerar(){
+  const lista = anotacoesParaRelatorio();
+  if (lista.length === 0) {
+    alert('Nenhuma anotação encontrada no período/filtro selecionado.');
+    return;
+  }
+  const de = document.getElementById('rel-de').value;
+  const ate = document.getElementById('rel-ate').value;
+  const baseData = document.getElementById('rel-base-data').value;
+  const titulo = (document.getElementById('rel-titulo').value || 'Relatório de Anotações — BE Garden').trim();
+  const autor = document.getElementById('rel-autor').value.trim();
+  const incSumario = document.getElementById('rel-sumario').value === 'sim';
+
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  const periodoTxt = (de || ate)
+    ? `${de ? new Date(de+'T00:00:00').toLocaleDateString('pt-BR') : '—'} até ${ate ? new Date(ate+'T00:00:00').toLocaleDateString('pt-BR') : 'hoje'}`
+    : 'Todo o período disponível';
+  const baseTxt = baseData === 'criacao' ? 'Data de criação' : 'Data de agendamento / anotação';
+
+  // Filtros ativos
+  const filtroAtivo = [];
+  const busca = document.getElementById('notas-search').value.trim();
+  if (busca) filtroAtivo.push('busca: "' + busca + '"');
+  const ft = document.getElementById('notas-filter-tratativa').value;
+  if (ft) filtroAtivo.push('tratativa: ' + (getDictOption('tratativa',ft)?.nome || ft));
+  const fh = document.getElementById('notas-filter-humor').value;
+  if (fh) filtroAtivo.push('humor: ' + (getDictOption('humor',fh)?.nome || fh));
+  const fa = document.getElementById('notas-filter-agend').value;
+  if (fa) filtroAtivo.push('agendamento: ' + (getDictOption('agendamento',fa)?.nome || fa));
+
+  // Sumário
+  let sumarioHTML = '';
+  if (incSumario) {
+    const hoje_iso = new Date().toISOString().slice(0,10);
+    const futuras = lista.filter(n => (n.dataISO||'').slice(0,10) > hoje_iso).length;
+    const passadas = lista.filter(n => (n.dataISO||'').slice(0,10) <= hoje_iso && n.dataISO).length;
+    const semData = lista.filter(n => !n.dataISO).length;
+
+    const distribBy = (chave, dict) => {
+      const cnt = {};
+      lista.forEach(n => { const v = n[chave] || '(vazio)'; cnt[v] = (cnt[v]||0)+1; });
+      return Object.entries(cnt).sort((a,b) => b[1]-a[1]).map(([k,v]) => {
+        const label = k === '(vazio)' ? '(sem preencher)' : (getDictOption(dict, k)?.nome || k);
+        return `<li>${esc(label)}: <strong>${v}</strong></li>`;
+      }).join('');
+    };
+    const topClientes = {};
+    lista.forEach(n => { const c = (n.cliente || n.unidade || '—'); topClientes[c] = (topClientes[c]||0)+1; });
+    const top5 = Object.entries(topClientes).sort((a,b) => b[1]-a[1]).slice(0,5)
+      .map(([k,v]) => `<li>${esc(k)}: <strong>${v}</strong> anotação(ões)</li>`).join('');
+
+    sumarioHTML = `
+      <div class="sumario">
+        <h2>Sumário Executivo</h2>
+        <div class="sum-grid">
+          <div class="sum-card">
+            <div class="sum-num">${lista.length}</div>
+            <div class="sum-lbl">Anotações no período</div>
+          </div>
+          <div class="sum-card">
+            <div class="sum-num">${futuras}</div>
+            <div class="sum-lbl">Agendamentos futuros</div>
+          </div>
+          <div class="sum-card">
+            <div class="sum-num">${passadas}</div>
+            <div class="sum-lbl">Já ocorridas</div>
+          </div>
+          <div class="sum-card">
+            <div class="sum-num">${semData}</div>
+            <div class="sum-lbl">Sem data definida</div>
+          </div>
+        </div>
+        <div class="sum-cols">
+          <div>
+            <h3>Distribuição por Tratativa</h3>
+            <ul>${distribBy('tratativa','tratativa')}</ul>
+          </div>
+          <div>
+            <h3>Distribuição por Humor</h3>
+            <ul>${distribBy('humor','humor')}</ul>
+          </div>
+          <div>
+            <h3>Situação do Termo</h3>
+            <ul>${distribBy('termo','termo')}</ul>
+          </div>
+          <div>
+            <h3>Top 5 clientes (por nº de anotações)</h3>
+            <ul>${top5}</ul>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Detalhamento
+  const detalheHTML = lista.map((n, i) => {
+    const trat = n.tratativa ? getDictOption('tratativa',n.tratativa) : null;
+    const humo = n.humor ? getDictOption('humor',n.humor) : null;
+    const agen = n.agendamento ? getDictOption('agendamento',n.agendamento) : null;
+    const term = n.termo ? getDictOption('termo',n.termo) : null;
+    const dt = n.dataISO ? new Date(n.dataISO.slice(0,10)+'T00:00:00').toLocaleDateString('pt-BR') : '—';
+    const dtCriada = n.criadoEm ? new Date(n.criadoEm).toLocaleString('pt-BR') : (n.atualizadoEm ? new Date(n.atualizadoEm).toLocaleString('pt-BR') : '—');
+
+    const badges = [];
+    if (trat) badges.push(`<span class="bd" style="background:${trat.cor}">${esc(trat.icone||'')} ${esc(trat.nome)}</span>`);
+    if (humo) badges.push(`<span class="bd" style="background:${humo.cor}">${esc(humo.icone||'')} ${esc(humo.nome)}</span>`);
+    if (agen && agen.id !== 'sem') badges.push(`<span class="bd bd-out" style="color:${agen.cor};border-color:${agen.cor}">${esc(agen.icone||'')} ${esc(agen.nome)}</span>`);
+    if (term && term.id !== 'nao_enviado') badges.push(`<span class="bd bd-out" style="color:${term.cor};border-color:${term.cor}">${esc(term.icone||'')} ${esc(term.nome)}</span>`);
+
+    return `
+      <div class="anot">
+        <div class="anot-h">
+          <div class="anot-titulo">
+            <span class="anot-num">${i+1}</span>
+            <strong>Unidade ${esc(String(n.unidade||'—'))}</strong>
+            · ${esc(n.cliente||'—')}
+          </div>
+          <div class="anot-data">${dt}</div>
+        </div>
+        <div class="anot-badges">${badges.join(' ')}</div>
+        ${n.situacao ? `<div class="anot-lbl">Situação</div><div class="anot-txt">${esc(n.situacao)}</div>` : ''}
+        ${n.obs ? `<div class="anot-lbl">Observações</div><div class="anot-txt">${esc(n.obs)}</div>` : ''}
+        ${n.responsavel ? `<div class="anot-lbl">Responsável</div><div class="anot-txt">${esc(n.responsavel)}</div>` : ''}
+        <div class="anot-foot">Registrada em ${dtCriada}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Monta o HTML completo do PDF
+  const html = `<!DOCTYPE html><html><head>
+<meta charset="utf-8">
+<title>${esc(titulo)}</title>
+<style>
+  @page { size: A4; margin: 90px 60px 90px 90px; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #111; font-size: 11pt; line-height: 1.5; }
+
+  /* Timbrado como background — repete em cada página impressa */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url('${TIMBRADO_BE_B64}');
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: 100% 100%;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  h1 { font-size: 20pt; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 4px; color: #000; }
+  h2 { font-size: 14pt; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; color: #000; margin: 32px 0 12px; border-bottom: 2px solid #000; padding-bottom: 6px; }
+  h3 { font-size: 10pt; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: #000; margin: 12px 0 6px; }
+  ul { padding-left: 18px; margin: 4px 0; }
+  li { margin: 2px 0; font-size: 10pt; }
+
+  .cover {
+    padding-top: 20px;
+  }
+  .cover .meta { color: #555; font-size: 10pt; margin-top: 12px; }
+  .cover .meta div { margin: 2px 0; }
+  .cover .meta strong { color: #000; }
+  .filtros {
+    background: #f4f4f5;
+    border-left: 3px solid #46B276;
+    padding: 8px 12px;
+    margin-top: 16px;
+    font-size: 10pt;
+  }
+
+  .sumario { page-break-after: always; }
+  .sum-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 12px 0 20px;
+  }
+  .sum-card {
+    border: 1px solid #d4d4d8;
+    border-radius: 6px;
+    padding: 12px;
+    text-align: center;
+    background: #fafafa;
+  }
+  .sum-num { font-size: 22pt; font-weight: 900; color: #000; }
+  .sum-lbl { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.10em; color: #555; margin-top: 2px; }
+  .sum-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 40px;
+  }
+
+  .anot {
+    border: 1px solid #d4d4d8;
+    border-left: 3px solid #46B276;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    page-break-inside: avoid;
+    background: #fff;
+  }
+  .anot-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; border-bottom: 1px dashed #e4e4e7; padding-bottom: 4px; }
+  .anot-titulo { font-size: 11pt; }
+  .anot-num { display: inline-block; background: #46B276; color: #fff; padding: 1px 6px; border-radius: 3px; font-weight: 900; font-size: 9pt; margin-right: 4px; }
+  .anot-data { font-weight: 700; font-size: 10pt; color: #333; white-space: nowrap; }
+  .anot-badges { margin: 4px 0 8px; }
+  .bd { display: inline-block; padding: 2px 7px; border-radius: 3px; color: #fff; font-size: 8pt; font-weight: 700; margin-right: 4px; letter-spacing: 0.02em; }
+  .bd-out { background: transparent; border: 1px solid; }
+  .anot-lbl { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.10em; color: #71717a; font-weight: 700; margin-top: 6px; }
+  .anot-txt { font-size: 10pt; color: #111; margin-top: 2px; white-space: pre-wrap; }
+  .anot-foot { font-size: 8pt; color: #a1a1aa; margin-top: 8px; padding-top: 4px; border-top: 1px dashed #e4e4e7; }
+</style>
+</head>
+<body>
+  <div class="cover">
+    <h1>${esc(titulo)}</h1>
+    <div class="meta">
+      <div><strong>Período:</strong> ${periodoTxt}</div>
+      <div><strong>Critério da data:</strong> ${baseTxt}</div>
+      <div><strong>Total de anotações:</strong> ${lista.length}</div>
+      <div><strong>Gerado em:</strong> ${hoje}${autor ? ' · <strong>Por:</strong> ' + esc(autor) : ''}</div>
+    </div>
+    ${filtroAtivo.length > 0 ? `<div class="filtros"><strong>Filtros aplicados:</strong> ${filtroAtivo.map(esc).join(' · ')}</div>` : ''}
+  </div>
+
+  ${sumarioHTML}
+
+  <h2>Detalhamento (${lista.length} anotações)</h2>
+  ${detalheHTML}
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+  w.focus();
+  setTimeout(() => w.print(), 500);
+  relatorioModalClose();
+}
+
+
+// =====================================================
+// RACIONAL DA CORREÇÃO INCC PARCELA-A-PARCELA
+// Retorna array com detalhes de cada parcela recebida corrigida:
+//   { num, tipo, dtReceb, valorPago, mesPag, idxRefPag, idxRefHoje,
+//     fator, fatorPct, valorCorrigido, aviso }
+// =====================================================
+
+// ========== HANDLERS DO MODAL RACIONAL ==========
+let _racionalUnidadeAtual = null;
+
+function racionalModalOpen(unidade){
+  _racionalUnidadeAtual = unidade;
+  document.getElementById('racional-body').innerHTML = gerarRacionalHTML(unidade, 'modal');
+  document.getElementById('racional-modal').classList.add('open');
+}
+function racionalModalClose(){
+  document.getElementById('racional-modal').classList.remove('open');
+  _racionalUnidadeAtual = null;
+}
+function racionalImprimirPDF(){
+  if (!_racionalUnidadeAtual) return;
+  const cli = clientes.find(c => String(c.unidade) === String(_racionalUnidadeAtual));
+  const nomeCli = cli ? cli.cliente : '';
+  const conteudo = gerarRacionalHTML(_racionalUnidadeAtual, 'pdf');
+  const w = window.open('', '_blank');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8">
+    <title>Racional INCC — Unidade ${esc(String(_racionalUnidadeAtual))}</title>
+    <style>
+      ${pdfStyleBase()}
+      h1 { font-size: 18pt; margin: 0 0 4px; font-weight: 900; }
+      .subt { color: #555; font-size: 10pt; margin-bottom: 20px; }
+      ${pdfStyleRacional()}
+    </style>
+    </head><body>
+    <h1>Racional da Correção INCC — Parcela a Parcela</h1>
+    <div class="subt">Unidade ${esc(String(_racionalUnidadeAtual))} · ${esc(nomeCli)} · Gerado em ${new Date().toLocaleDateString('pt-BR')}</div>
+    ${conteudo}
+    </body></html>`);
+  w.document.close();
+  w.focus();
+  setTimeout(() => w.print(), 500);
+}
+
+// CSS base para o PDF (com timbrado)
+function pdfStyleBase(){
+  return `
+    @page { size: A4; margin: 90px 60px 90px 90px; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color: #111; font-size: 11pt; line-height: 1.5;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url('${TIMBRADO_BE_B64}');
+      background-repeat: no-repeat;
+      background-position: top left;
+      background-size: 100% 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+  `;
+}
+
+// CSS específico do racional no PDF
+function pdfStyleRacional(){
+  return `
+    .rac-header { font-size: 12pt; margin-bottom: 10px; font-weight: 700; }
+    .rac-header .rac-sub { font-size: 9pt; color: #555; font-weight: 400; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .rac-resumo { display: table; width: 100%; margin-bottom: 16px; border-collapse: separate; border-spacing: 8px 0; }
+    .rac-resumo-item { display: table-cell; border: 1px solid #d4d4d8; border-radius: 4px; padding: 8px 12px; background: #fafafa; }
+    .rac-r-lbl { font-size: 8pt; text-transform: uppercase; letter-spacing: 0.10em; color: #555; margin-bottom: 2px; font-weight: 700; }
+    .rac-r-val { font-size: 12pt; font-weight: 900; color: #000; }
+    .rac-tbl-pdf { width: 100%; border-collapse: collapse; font-size: 9pt; }
+    .rac-tbl-pdf th { background: #f4f4f5; border-bottom: 2px solid #000; padding: 6px; text-align: left; font-size: 8pt; letter-spacing: 0.06em; text-transform: uppercase; }
+    .rac-tbl-pdf td { padding: 4px 6px; border-bottom: 1px solid #e4e4e7; }
+    .rac-tbl-pdf small { color: #999; font-size: 7pt; }
+    .rac-tbl-pdf .rac-c { text-align: center; }
+    .rac-tbl-pdf .rac-r { text-align: right; }
+    .rac-tbl-pdf .rac-fator { color: #46B276; font-weight: 700; }
+    .rac-tbl-pdf .rac-corrigido { font-weight: 700; }
+    .rac-tbl-pdf tfoot td { background: #f4f4f5; border-top: 2px solid #000; padding: 8px 6px; }
+    .rac-tbl-pdf tr.rac-aviso td { background: #fff7ed; }
+    .rac-nota { margin-top: 14px; padding: 10px 14px; background: #f0fdf4; border-left: 3px solid #46B276; font-size: 9pt; }
+  `;
+}
+
+function detalharCorrecaoIncc(unidade){
+  const key = _resolveKeyParcelas(unidade);
+  const parcelas = BASE_PARCELAS[key] || [];
+  const recebidas = parcelas.filter(p => p.s === 'r' && p.dr && p.vr > 0);
+  // Ordena por data de pagamento crescente
+  recebidas.sort((a,b) => (a.dr||'').localeCompare(b.dr||''));
+  const hoje = mesAtualISO();
+  const refHoje = addMesesISO(hoje, -2);
+  const idxHoje = inccIndex(refHoje);
+
+  const TIPO_LBL = {
+    'P': 'Parcela', 'E': 'Entrada', 'V': 'Anual', 'M': 'Mensal',
+    '3': 'Única', 'F': 'Financiamento', '1': 'Acordo', '3': 'Anuidade',
+  };
+
+  let totalPago = 0, totalCorrigido = 0;
+  const rows = recebidas.map((p, i) => {
+    const mesPag = p.dr.slice(0,7);
+    const refPag = addMesesISO(mesPag, -2);
+    const idxPag = inccIndex(refPag);
+    let fator = 1, aviso = '';
+    if (idxHoje !== null && idxPag !== null) {
+      fator = idxHoje / idxPag;
+    } else {
+      aviso = 'INCC faltando: ' + (idxHoje===null ? refHoje : refPag);
+    }
+    const valorPago = p.vr;
+    const valorCorrigido = valorPago * fator;
+    totalPago += valorPago;
+    totalCorrigido += valorCorrigido;
+    return {
+      num: i+1,
+      tipo: TIPO_LBL[p.t] || p.t || '—',
+      dtReceb: p.dr,
+      mesPag,
+      valorPago,
+      refPag,
+      idxRefPag: idxPag,
+      refHoje,
+      idxRefHoje: idxHoje,
+      fator,
+      fatorPct: (fator - 1) * 100,
+      valorCorrigido,
+      aviso,
+    };
+  });
+
+  return { rows, totalPago, totalCorrigido, hoje, refHoje, idxHoje };
+}
+
+// Gera HTML da tabela do racional. `contexto` pode ser 'modal' ou 'pdf'.
+function gerarRacionalHTML(unidade, contexto){
+  const dados = detalharCorrecaoIncc(unidade);
+  if (dados.rows.length === 0) {
+    return `<div style="padding:20px;text-align:center;color:var(--muted);font-family:'N27',sans-serif">
+      Nenhuma parcela recebida encontrada na base de Gestão para esta unidade.
+    </div>`;
+  }
+  const isPdf = contexto === 'pdf';
+  const tblCls = isPdf ? 'rac-tbl-pdf' : 'rac-tbl';
+  const cli = clientes.find(c => String(c.unidade) === String(unidade));
+  const nomeCli = cli ? cli.cliente : '—';
+  const dif = dados.totalCorrigido - dados.totalPago;
+  const difPct = dados.totalPago > 0 ? (dif / dados.totalPago) * 100 : 0;
+
+  const fmtMoney = v => 'R$ ' + (v||0).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  const fmtDate = iso => iso ? iso.split('-').reverse().join('/') : '—';
+  const fmtMes = iso => {
+    if (!iso) return '—';
+    const [a,m] = iso.split('-');
+    const mn = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return mn[parseInt(m,10)-1] + '/' + a.slice(2);
+  };
+  const fmtIdx = v => v == null ? '—' : v.toLocaleString('pt-BR', {minimumFractionDigits: 3, maximumFractionDigits: 3});
+  const fmtPct = v => (v>=0?'+':'') + v.toFixed(2).replace('.',',') + '%';
+
+  const rowsHTML = dados.rows.map(r => `
+    <tr${r.aviso ? ' class="rac-aviso"' : ''}>
+      <td class="rac-c">${r.num}</td>
+      <td>${r.tipo}</td>
+      <td class="rac-c">${fmtDate(r.dtReceb)}</td>
+      <td class="rac-r">${fmtMoney(r.valorPago)}</td>
+      <td class="rac-c" title="Índice INCC-DI de ${r.refPag} (mês do pagamento − 2)">${fmtIdx(r.idxRefPag)}<br><small>${fmtMes(r.refPag)}</small></td>
+      <td class="rac-c" title="Índice INCC-DI de ${r.refHoje} (mês atual − 2)">${fmtIdx(r.idxRefHoje)}<br><small>${fmtMes(r.refHoje)}</small></td>
+      <td class="rac-c rac-fator">${fmtPct(r.fatorPct)}${r.aviso ? ' <span title="'+r.aviso+'">⚠</span>' : ''}</td>
+      <td class="rac-r rac-corrigido">${fmtMoney(r.valorCorrigido)}</td>
+    </tr>
+  `).join('');
+
+  return `
+    <div class="rac-header">
+      <div><strong>Unidade ${esc(String(unidade))}</strong> · ${esc(nomeCli)}</div>
+      <div class="rac-sub">Correção INCC-DI com defasagem de 2 meses · Base atual: ${fmtMes(dados.refHoje)} (índice ${fmtIdx(dados.idxHoje)})</div>
+    </div>
+    <div class="rac-resumo">
+      <div class="rac-resumo-item"><div class="rac-r-lbl">Total pago (Valor Reajustado)</div><div class="rac-r-val">${fmtMoney(dados.totalPago)}</div></div>
+      <div class="rac-resumo-item"><div class="rac-r-lbl">Recebido Corrigido INCC</div><div class="rac-r-val" style="color:#46B276">${fmtMoney(dados.totalCorrigido)}</div></div>
+      <div class="rac-resumo-item"><div class="rac-r-lbl">Correção adicional aplicada</div><div class="rac-r-val" style="color:${dif>=0?'#46B276':'#dc2626'}">${fmtMoney(dif)} <small>(${fmtPct(difPct)})</small></div></div>
+    </div>
+    <table class="${tblCls}">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tipo</th>
+          <th>Dt. Pagamento</th>
+          <th style="text-align:right">Valor Pago</th>
+          <th>INCC ref. pag.</th>
+          <th>INCC atual</th>
+          <th>Correção</th>
+          <th style="text-align:right">Valor Corrigido</th>
+        </tr>
+      </thead>
+      <tbody>${rowsHTML}</tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" style="text-align:right"><strong>TOTAIS</strong></td>
+          <td class="rac-r"><strong>${fmtMoney(dados.totalPago)}</strong></td>
+          <td colspan="2"></td>
+          <td class="rac-c"><strong>${fmtPct(difPct)}</strong></td>
+          <td class="rac-r"><strong style="color:#46B276">${fmtMoney(dados.totalCorrigido)}</strong></td>
+        </tr>
+      </tfoot>
+    </table>
+    <div class="rac-nota">
+      <strong>Fórmula:</strong> valor corrigido = valor pago × ( INCC[mês atual − 2] ÷ INCC[mês do pagamento − 2] ).
+      A defasagem de 2 meses é a padrão contratual em incorporação — o índice do INCC-DI publicado num mês só entra no cálculo dois meses depois.
+    </div>
+  `;
+}
+
 // Popula selects na primeira renderização (após DOM pronto)
 document.addEventListener('DOMContentLoaded', () => {
   try { fillDictSelects(); } catch(e){}
@@ -4763,6 +5430,90 @@ document.addEventListener('DOMContentLoaded', () => {
     <div id="config-body"></div>
     <div class="modal-actions">
       <button class="btn-calc" style="width:auto;padding:11px 22px" onclick="configModalClose()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL RELATÓRIO PDF ===================== -->
+<div class="modal-overlay" id="relatorio-modal">
+  <div class="modal rel-modal-inner">
+    <div class="rel-modal-header">
+      <div>
+        <h3 style="margin:0">📥 Gerar Relatório de Anotações & Agendamentos</h3>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Filtre o período desejado e gere um PDF com timbrado BE. Os filtros já aplicados na Aba 5 (busca, tratativa, humor, agendamento) também valem no relatório.
+        </div>
+      </div>
+      <button class="nego-close-x" onclick="relatorioModalClose()">✕</button>
+    </div>
+
+    <div class="calc-grid2" style="margin-bottom:12px">
+      <div class="calc-field">
+        <label>Data inicial</label>
+        <input type="date" id="rel-de">
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">deixe vazio pra "desde sempre"</div>
+      </div>
+      <div class="calc-field">
+        <label>Data final</label>
+        <input type="date" id="rel-ate">
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">deixe vazio pra "até hoje"</div>
+      </div>
+    </div>
+
+    <div class="calc-field">
+      <label>Baseado em qual data?</label>
+      <select id="rel-base-data">
+        <option value="anotacao">Data da anotação / agendamento (o campo Data)</option>
+        <option value="criacao">Data de criação no sistema (quando foi registrada)</option>
+      </select>
+    </div>
+
+    <div class="calc-field">
+      <label>Título do relatório (opcional)</label>
+      <input type="text" id="rel-titulo" placeholder="Ex: Relatório Semanal — Comercial BE Garden" value="Relatório de Anotações &amp; Agendamentos — BE Garden">
+    </div>
+
+    <div class="calc-grid2">
+      <div class="calc-field">
+        <label>Gerado por (opcional)</label>
+        <input type="text" id="rel-autor" placeholder="Seu nome">
+      </div>
+      <div class="calc-field">
+        <label>Incluir sumário executivo?</label>
+        <select id="rel-sumario">
+          <option value="sim" selected>Sim (recomendado)</option>
+          <option value="nao">Não (só a lista detalhada)</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="rel-preview-info" style="background:#fafafa;border:1px solid var(--border);border-radius:6px;padding:12px 16px;margin-top:12px;font-family:'N27',sans-serif;font-size:12px">
+      <span id="rel-preview-count">—</span>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="relatorioModalClose()">Cancelar</button>
+      <button class="btn-calc" onclick="relatorioGerar()">📄 Gerar PDF</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MODAL RACIONAL INCC ===================== -->
+<div class="modal-overlay" id="racional-modal">
+  <div class="modal rac-modal-inner">
+    <div class="rac-modal-header">
+      <div>
+        <h3 style="margin:0">🔍 Racional da Correção INCC — Parcela a Parcela</h3>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">
+          Cada parcela recebida foi corrigida pelo INCC-DI do mês seguinte ao pagamento até o mês atual, com defasagem de 2 meses.
+        </div>
+      </div>
+      <button class="nego-close-x" onclick="racionalModalClose()">✕</button>
+    </div>
+    <div id="racional-body"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="racionalImprimirPDF()">🖨 Imprimir / PDF</button>
+      <button class="btn-calc" onclick="racionalModalClose()">Fechar</button>
     </div>
   </div>
 </div>
